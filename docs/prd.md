@@ -1,5 +1,3 @@
-Of course. Here is the updated Product Requirements Document with the "Out of Scope Ideas Post MVP" section included.
-
 # Unique Tours Platform Product Requirements Document (PRD)
 
 ## Goals and Background Context

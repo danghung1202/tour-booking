@@ -203,6 +203,7 @@ interface Profile {
   phone?: string;
   photo_url?: string;
   created_at: string; // ISO 8601
+  updated_at: string;
 }
 ```
 
