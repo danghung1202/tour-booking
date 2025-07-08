@@ -29,6 +29,17 @@ The Unique Tours Platform bridges the gap between travelers seeking authentic ex
   - Category-based tour organization
   - Email notifications for key actions
 
+## Documentation
+
+Find detailed project documentation in the `/docs` directory:
+
+1. [`project-brief.md`](/docs/project-brief.md) - Initial project requirements and goals
+2. [`prd.md`](/docs/prd.md) - Comprehensive Product Requirements Document
+3. [`front-end-spec.md`](/docs/front-end-spec.md) - Frontend specifications and UI/UX guidelines
+4. [`front-end-architecture.md`](/docs/front-end-architecture.md) - Frontend architectural design and patterns
+5. [`fullstack-architecture.md`](/docs/fullstack-architecture.md) - Complete system architecture and technical design
+6. [`v0-prompts/`](/docs/v0-prompts/) - Initial project v0 prompts
+
 ## Technology Stack
 
 - **Frontend**: Next.js (React)
