@@ -8,7 +8,7 @@ export default function Home() {
       <Header />
       <main className={styles.main}>
         <div className={styles.container}>
-          <h1 className={styles.title}>Tour Booking Platform</h1>
+          <h1 className={styles.title}>Tour Booking Platform Preview</h1>
           <p className={styles.description}>
             Welcome to our tour booking platform. Find and book amazing tours with local guides.
           </p>
