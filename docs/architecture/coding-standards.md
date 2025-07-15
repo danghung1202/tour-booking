@@ -7,7 +7,7 @@ This section defines the coding standards, style guides, and overall project str
 The project will follow the standard Next.js application structure within the monorepo.
 
 ```
-/
+apps/web/
 |-- .vscode/         # VSCode settings
 |-- app/             # Next.js App Router: main pages and layouts
 |   |-- (auth)/        # Route group for auth pages (login, register)

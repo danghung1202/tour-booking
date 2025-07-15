@@ -144,9 +144,140 @@ interface Tour {
   location: string;
   capacity: number;
   status: 'draft' | 'published' | 'archived';
-  images: string[];
+  images: TourImage[];
   general_availability_info: string;
   created_at: string; // ISO 8601
   updated_at: string;
 }
+
+type TourLanguage {
+  name: string;
+  code: string;
+}
+
+// Define a specific type for a single image object.
+// This makes it easy to add more properties like 'caption' later.
+type TourImage = {
+  url: string;
+  caption?: string; // Optional caption for future use
+};
 ``` 
+### Category
+
+**Purpose:** To classify tours, allowing tourists to browse and filter by language. The initial list is fixed by developers.
+
+**Key Attributes:**
+
+  * `id`: `UUID` - Primary key.
+  * `name`: `text` - The unique name of the category (e.g., "Culinary", "Adventure").
+  * `description`: `string` - Short description.
+  * `image`: `string` - The image url of category.
+
+**TypeScript Interface:**
+
+```typescript
+interface Category {
+  id: string; // UUID
+  name: string;
+  description: string // Short description
+  image: string; // The hero image of category
+}
+```
+
+### Language
+
+**Purpose:** To classify tours, allowing tourists to browse and filter by interest language. The initial list is fixed by developers.
+
+**Key Attributes:**
+
+  * `id`: `UUID` - Primary key.
+  * `name`: `text` - e.g., "English"
+  * `code`: `string` - e.g, "en".
+
+**TypeScript Interface:**
+
+```typescript
+interface Category {
+  id: string; // UUID
+  name: string;
+  description: string // Short description
+  image: string; // The hero image of category
+}
+```
+
+### Booking
+
+**Purpose:** Represents a single booking of a tour by a tourist, which can be confirmed or rejected by the guide.
+
+**Key Attributes:**
+
+  * `id`: `UUID` - Primary key.
+  * `tour_id`: `UUID` - Foreign key to `tours.id`.
+  * `tourist_id`: `UUID` (nullable) - Foreign key to `profiles.id` for registered users.
+  * `guest_name`: `text` (nullable) - Name provided by a guest tourist.
+  * `guest_email`: `text` (nullable) - Email provided by a guest tourist.
+  * `phone`: `text` (nullable) - Phone number for the booking.
+  * `num_adults`: `integer`
+  * `num_kids`: `integer`
+  * `booking_datetime`: `date` - The specific date and time of the booking the tourist has booked.
+  * `status`: `enum ('pending', 'confirmed', 'rejected', 'cancelled')` - The current status of the booking.
+  * `assigned_guide_user_id`: `UUID` (nullable) - Reserved for future "Organization" functionality.
+
+**TypeScript Interface:**
+
+```typescript
+interface Booking {
+  id: string; // UUID
+  tour_id: string; // UUID
+  tourist_id?: string; // UUID
+  guest_name?: string;
+  guest_email?: string;
+  phone?: string;
+  num_adults: number;
+  num_kids: number;
+  booking_datetime: string; // ISO 8601 format
+  status: 'pending' | 'confirmed' | 'rejected' | 'cancelled';
+  assigned_guide_user_id?: string; // UUID
+  created_at: string; // ISO 8601
+}
+```
+
+### Tour Availability
+
+**Purpose:** Tracks dates when a specific tour is *not* available, as set by the Tour Guide.
+
+**Key Attributes:**
+
+  * `id`: `UUID` - Primary key.
+  * `tour_id`: `UUID` - Foreign key to `tours.id`.
+  * `unavailable_date`: `date` - A specific date that is blocked off.
+
+**TypeScript Interface:**
+
+```typescript
+interface TourAvailability {
+  id: string; // UUID
+  tour_id: string; // UUID
+  unavailable_date: string; // YYYY-MM-DD
+}
+```
+
+### TourTimeSlot
+
+**Purpose:** To store the predefined appointment times available for a specific tour.
+
+**Key Attributes:**
+  * `id`: `UUID`
+  * `tour_id`: `UUID` - Foreign key to the `tours` table.
+  * `start_time`: `TIME` - The time of the slot (e.g., '09:00:00').
+
+**TypeScript Interface:**
+
+  ```typescript
+  interface TourTimeSlot {
+    id: string; // UUID
+    tour_id: string; // UUID
+    start_time: string; // HH:MM:SS format
+  }
+  ```
+**Relationships:** Many-to-one with `Tour`.
