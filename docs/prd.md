@@ -165,15 +165,19 @@ As a Developer, I want to set up a new Next.js project with TypeScript, connect 
 
 ### Story 1.2 User Role Definition & Foundational Data Model in Supabase
 
-As a Developer, I want to define the core data models in Supabase for user profiles and roles, so that the platform can distinguish between Tourists, Guides, and Admins, and prepare the schema for future extensibility.
+**As a** Developer, **I want to** define the core data models in Supabase for user profiles, roles, tours, bookings, languages, and time slots, **so that** the platform can distinguish between user types and the database schema can support all required MVP features while being ready for future extensibility.
 
 #### Acceptance Criteria
 
-* 1: The Supabase `auth.users` table is used for core authentication.
-* 2: A `profiles` table is created, linked one-to-one with `auth.users`, containing a `role` column ('tourist', 'guide', 'admin') and basic profile info (name, bio, photo URL).
-* 3: The `Tours` table schema includes a nullable `organization_id` field to accommodate future Organization functionality.
-* 4: The `Bookings` table schema includes a nullable `assigned_guide_user_id` field for future Organization functionality.
-* 5: Initial placeholder structures or design considerations for future `Organizations` and `OrganizationMembers` tables are documented.
+* 1.  The Supabase `auth.users` table is used for core authentication.
+* 2.  A `profiles` table is created, linked one-to-one with `auth.users`, containing a `role` column ('tourist', 'guide', 'admin') and a `phone` field.
+* 3.  A `languages` table is created to store a canonical list of tour languages.
+* 4.  A `categories` table is created to store a canonical list of tour categories.
+* 5.  A `tours` table is created that includes a `timezone` field and foreign keys to `profiles`, `categories`, and `languages`. The table also includes a nullable `organization_id` field for future extensibility.
+* 6.  A `tour_languages` join table is created to support a many-to-many relationship between tours and languages.
+* 7.  A `tour_time_slots` table is created to store the available appointment times for each tour.
+* 8.  A `bookings` table is created with a `booking_datetime` (TIMESTAMPTZ) field and a nullable `assigned_guide_user_id` for future functionality.
+* 9. Initial placeholder structures or design considerations for future `Organizations` and `OrganizationMembers` tables are documented.
 
 ### Story 1.3 Define Initial Fixed List of Tour Categories
 
@@ -229,6 +233,18 @@ As a Developer, I need a secure, one-time process to create the first Admin acco
 * 2: The process is documented for the project owner or lead developer to execute.
 * 3: This process is designed for initial setup only and not for ongoing admin creation.
 
+### Story 1.8 Define Initial Fixed Lists of Tour Languages and Time Zones
+
+**As a** Developer, **I want to** populate the database with initial, fixed lists of supported tour languages and common time zones, **so that** these are available for guides to select from dropdown menus when creating or editing a tour.
+
+#### Acceptance Criteria
+
+1.  A `languages` table is created in the Supabase database.
+2.  The `languages` table is populated with an initial, predefined list of languages (e.g., 'English', 'Vietnamese', 'French', 'Japanese', 'Spanish').
+3.  The `tours` table schema includes a `timezone` text field that will store a valid IANA Time Zone Name.
+4.  The application has access to a predefined list of common IANA Time Zones to populate the "Tour Time Zone" dropdown.
+5.  The language and time zone lists are accessible by the application for use in the tour creation form.
+
 ## Epic 2 Tour Guide Onboarding & Tour Creation MVP
 
 Enable authenticated Tour Guides to complete their profile (name, photo, bio) and to create, edit, and publish detailed tour listings. Listings must include title, description, price, location, duration, images, capacity, assignment to a predefined category, and the "Guide's Story" using a rich-text editor. This delivers the core supply-side functionality for the platform.
@@ -246,15 +262,16 @@ As an authenticated Tour Guide, I want to complete and update my public profile 
 
 ### Story 2.2 Initiate New Tour Listing & Define Core Details
 
-As an authenticated Tour Guide, I want to start creating a new tour by providing its essential details like title, description, price, location, duration, capacity, and assign it to a predefined category, so that the fundamental aspects of my tour are captured and classified.
+**As a** Tour Guide, **I want to** start creating a new tour by providing its essential details, including title, description, price, location, images, category, languages, timezone, and available time slots, **so that** the fundamental aspects of my tour are fully captured and classified for tourists to view.
 
 #### Acceptance Criteria
-
-* 1: A "Create Tour" form is available to guides.
-* 2: The form includes fields for all core details (title, description, price, etc.).
-* 3: The form includes a mandatory dropdown to select **one category** from the predefined list created in Epic 1.
-* 4: The selected category is saved and associated with the tour record in the database.
-* 5: The `tours` table schema stores the assigned category and considers the nullable `organization_id` for future use.
+1.  A "Create Tour" form is available to guides.
+2.  The form includes fields for all core details (title, description, price, etc.).
+3.  The form includes a mandatory dropdown to select **one category** from the predefined list.
+4.  The form includes a mandatory multi-select input (e.g., checkboxes) for the guide to select all **languages** the tour is offered in.
+5.  The form includes a mandatory dropdown for the guide to select the tour's primary **time zone**.
+6.  The form includes an interface for the guide to add, edit, and remove multiple available **time slots** (e.g., '09:00', '13:00').
+7.  The selected category, languages, timezone, and time slots are saved and associated with the tour record in the database.
 
 ### Story 2.3 Enhance Tour Listing with Images
 
@@ -315,25 +332,23 @@ As a Visitor, I want to view a gallery of all published tours on a main listings
 
 ### Story 3.2 Simple Keyword Search & Category Filter for Tours
 
-As a Visitor, I want to use a simple keyword search and a category filter on the tour listings page, so I can quickly find tours relevant to my interests.
+**As a** Visitor, **I want to** use a simple keyword search and filters for category and language on the tour listings page, **so that** I can quickly find tours relevant to my interests.
 
 #### Acceptance Criteria
-
-* 1: The tour listings page includes a keyword search input field.
-* 2: The page also includes a filter option (e.g., a dropdown) to select a single tour category.
-* 3: The list of tours updates to show only results that match the keyword and/or selected category.
-* 4: A clear way to reset filters and view all tours again is provided.
+1.  The tour listings page includes a keyword search input field.
+2.  The page also includes filter options (e.g., dropdowns) to select a single tour **category** and a single **language**.
+3.  The list of tours updates to show only results that match the keyword and/or selected filters.
+4.  A clear way to reset filters and view all tours again is provided.
 
 ### Story 3.3 Detailed Tour Page Viewing
 
-As a Visitor, I want to view a detailed page for each tour, so I can get all the information needed to make a booking decision.
+**As a** Visitor, **I want to** view a detailed page for each tour, **so that** I can get all the information needed—including its languages and available times—to make a booking decision.
 
 #### Acceptance Criteria
-
-* 1: Each tour has a unique, shareable URL.
-* 2: The page displays all tour details: title, description, images, duration, price, category, inclusions/exclusions, meeting point, and the "Guide's Story".
-* 3: The tour's assigned category is clearly displayed.
-* 4: The page also includes the booking interface and the contact form for pre-booking questions.
+1.  Each tour has a unique, shareable URL.
+2.  The page displays all tour details: title, description, images, duration, price, category, and the "Guide's Story".
+3.  The page must clearly display a list of all **Languages** the tour is conducted in (e.g., "Conducted in: English, French").
+4.  The page must clearly display the list of available **Time Slots** for the tour, labeled with the tour's local time zone.
 
 ### Story 3.4 View Basic Tour Guide Profile Information
 
@@ -371,13 +386,13 @@ As a Tour Guide, I want a simple way to block out specific dates when my tour is
 
 ### Story 4.2 Tourist - View Available Tour Slots & Select for Booking
 
-As a Tourist on a tour detail page, I want to see available dates and select one for booking, so I can start the booking process.
+**As a** Tourist on a tour detail page, **I want to** see available dates and time slots and select a specific combination for booking, **so that** I can start the booking process for a specific time.
 
 #### Acceptance Criteria
-
-* 1: The booking interface on the tour detail page includes a date picker.
-* 2: Dates blocked by the guide (as per Story 4.1) are disabled or not shown.
-* 3: The tourist can select an available date to proceed with the booking.
+1.  The booking interface on the tour detail page includes a date picker.
+2.  The interface also displays the list of fixed **time slots** available for the tour.
+3.  The tourist must select an available **date AND one time slot** to proceed with the booking.
+4.  Dates that have been blocked out by the guide are disabled or cannot be selected.
 
 ### Story 4.3 Guest Tourist - Submit Booking Details with Spam Protection
 
@@ -401,13 +416,13 @@ As an Authenticated Tourist, I want to submit my booking with my details pre-fil
 
 ### Story 4.5 Booking Request Confirmation (On-Screen & Email to Tourist)
 
-As a Tourist, after submitting a booking request, I want to receive an immediate on-screen confirmation and an email, so I know my request was received.
+**As a** Tourist, after submitting a booking request, **I want to** receive an immediate on-screen confirmation and an email that includes the specific date and time I selected, **so that** I know my request was received with the correct details.
 
 #### Acceptance Criteria
-
-* 1: After submitting a booking, an on-screen message confirms that the request has been sent to the guide.
-* 2: An automated email is sent to the tourist's provided email address, confirming the booking details and stating that it is pending confirmation.
-* 3: For guest bookings, the confirmation email must include a unique, secure link to cancel the booking.
+1.  After submitting a booking, an on-screen message confirms that the request has been sent to the guide.
+2.  An automated email is sent to the tourist's provided email address, confirming the booking details.
+3.  The on-screen and email confirmations must display the specific **date and time slot** that was booked.
+4.  For guest bookings, the confirmation email must include a unique, secure link to cancel the booking.
 
 ### Story 4.6 Tour Guide - View & Manage Incoming Booking Requests
 
@@ -488,13 +503,13 @@ As an Admin, I want to view a list of all users and manage their accounts, so I 
 
 ### Story 5.3 Admin - View and Manage Tour Listings
 
-As an Admin, I want to view and manage all tour listings on the platform, so I can perform quality control and support guides.
+**As an** Admin, **I want to** view and manage all tour listings on the platform, including their languages and time slots, **so that** I can perform quality control and support guides.
 
 #### Acceptance Criteria
-
-* 1: An admin interface lists all tours created on the platform.
-* 2: The Admin can edit any tour's details, including its assigned category.
-* 3: The Admin can unpublish any tour if it violates platform policies.
+1.  An admin interface lists all tours created on the platform.
+2.  The Admin can edit any tour's details, including its assigned category.
+3.  The Admin can view, edit, or remove the **languages** and defined **time slots** associated with any tour.
+4.  The Admin can unpublish any tour if it violates platform policies.
 
 ## Out of Scope Ideas Post MVP
 

@@ -136,8 +136,11 @@ erDiagram
     Profile ||--o{ Tour : "guides"
     Profile ||--o{ Booking : "makes"
     Category ||--o{ Tour : "has"
+    Tour ||--|{ Tour_Language : "is_offered_in"
+    Language ||--|{ Tour_Language : "is_language_for"
     Tour ||--o{ Booking : "receives"
     Tour ||--o{ TourAvailability : "sets"
+    Tour ||--o{ TourTimeSlot : "sets"
 
     Profile {
         UUID id PK "FK to auth.users"
@@ -151,31 +154,53 @@ erDiagram
         UUID id PK
         UUID guide_id FK
         UUID category_id FK
+        UUID organization_id
         string title
         string description
+        string timezone 
         number price
         enum status
         jsonb images
+        string general_availability_info
+        string created_at
     }
     Category {
         UUID id PK
         string name
+        string description
+        string image
+    }
+    Language {
+        UUID id PK
+        string name
+        string code
+        string created_at
+    }
+    Tour_Language {
+        UUID tour_id FK
+        UUID language_id FK
     }
     Booking {
         UUID id PK
         UUID tour_id FK
         UUID tourist_id FK
-        date booking_date
+        string booking_datetime
         integer num_adults
         integer num_kids
         string guest_email
         string phone
         enum status
+        UUID assigned_guide_user_id
     }
     TourAvailability {
         UUID id PK
         UUID tour_id FK
         date unavailable_date
+    }
+    TourTimeSlot {
+        UUID id PK
+        UUID tour_id FK
+        string start_time
     }
 ```
 
@@ -218,6 +243,7 @@ interface Profile {
   * `category_id`: `UUID` - Foreign key to `categories.id`.
   * `title`: `text` - The main title of the tour.
   * `description`: `text` - A detailed description of the tour.
+  * `timezone`: `text` - A detailed timezone of the tour.
   * `story_html`: `text` - The rich-text "Guide's Story" content.
   * `price`: `number` - The price per participant.
   * `duration`: `text` - The approximate duration of the tour (e.g., "3 hours").
@@ -235,29 +261,48 @@ interface Tour {
   id: string; // UUID
   guide_id: string; // UUID
   category_id: string; // UUID
+  languages: TourLanguage[];
   title: string;
   description: string;
+  timezone: string;
   story_html: string;
   price: number;
   duration: string;
   location: string;
   capacity: number;
   status: 'draft' | 'published';
-  images: string[];
+  // Use the new TourImage[] type here
+  images: TourImage[]; 
   general_availability_info: string;
   organization_id?: string; // UUID
   created_at: string; // ISO 8601
 }
+
+type TourLanguage {
+  name: string;
+  code: string;
+}
+
+// Define a specific type for a single image object.
+// This makes it easy to add more properties like 'caption' later.
+type TourImage = {
+  url: string;
+  caption?: string; // Optional caption for future use
+};
 ```
+To map the JSONB images field in your TypeScript code, you should define a specific type for the image object. While you could use a simple `string[]` for the MVP, the more robust and future-proof approach is to define a `TourImage` type. This makes your code clearer and ready for future enhancements like adding captions or an order property.
+
 
 ### Category
 
-**Purpose:** To classify tours, allowing tourists to browse and filter by interest. The initial list is fixed by developers.
+**Purpose:** To classify tours, allowing tourists to browse and filter by language. The initial list is fixed by developers.
 
 **Key Attributes:**
 
   * `id`: `UUID` - Primary key.
   * `name`: `text` - The unique name of the category (e.g., "Culinary", "Adventure").
+  * `description`: `string` - Short description.
+  * `image`: `string` - The image url of category.
 
 **TypeScript Interface:**
 
@@ -265,6 +310,29 @@ interface Tour {
 interface Category {
   id: string; // UUID
   name: string;
+  description: string // Short description
+  image: string; // The hero image of category
+}
+```
+
+### Language
+
+**Purpose:** To classify tours, allowing tourists to browse and filter by interest language. The initial list is fixed by developers.
+
+**Key Attributes:**
+
+  * `id`: `UUID` - Primary key.
+  * `name`: `text` - e.g., "English"
+  * `code`: `string` - e.g, "en".
+
+**TypeScript Interface:**
+
+```typescript
+interface Category {
+  id: string; // UUID
+  name: string;
+  description: string // Short description
+  image: string; // The hero image of category
 }
 ```
 
@@ -282,7 +350,7 @@ interface Category {
   * `phone`: `text` (nullable) - Phone number for the booking.
   * `num_adults`: `integer`
   * `num_kids`: `integer`
-  * `booking_date`: `date` - The specific date the tourist has booked.
+  * `booking_datetime`: `date` - The specific date and time of the booking the tourist has booked.
   * `status`: `enum ('pending', 'confirmed', 'rejected', 'cancelled')` - The current status of the booking.
   * `assigned_guide_user_id`: `UUID` (nullable) - Reserved for future "Organization" functionality.
 
@@ -298,7 +366,7 @@ interface Booking {
   phone?: string;
   num_adults: number;
   num_kids: number;
-  booking_date: string; // YYYY-MM-DD
+  booking_datetime: string; // ISO 8601 format
   status: 'pending' | 'confirmed' | 'rejected' | 'cancelled';
   assigned_guide_user_id?: string; // UUID
   created_at: string; // ISO 8601
@@ -324,6 +392,26 @@ interface TourAvailability {
   unavailable_date: string; // YYYY-MM-DD
 }
 ```
+
+### TourTimeSlot
+
+**Purpose:** To store the predefined appointment times available for a specific tour.
+
+**Key Attributes:**
+  * `id`: `UUID`
+  * `tour_id`: `UUID` - Foreign key to the `tours` table.
+  * `start_time`: `TIME` - The time of the slot (e.g., '09:00:00').
+
+**TypeScript Interface:**
+
+  ```typescript
+  interface TourTimeSlot {
+    id: string; // UUID
+    tour_id: string; // UUID
+    start_time: string; // HH:MM:SS format
+  }
+  ```
+**Relationships:** Many-to-one with `Tour`.
 
 -----
 
@@ -445,9 +533,9 @@ components:
     BookingRequest:
       type: object
       properties:
-        booking_date:
+        booking_datetime:
           type: string
-          format: date
+          format: date-time  # ISO 8601 format
         num_adults:
           type: integer
         num_kids:
@@ -557,10 +645,21 @@ sequenceDiagram
     participant DB as Supabase DB
     participant Notifier as Notification Service
 
-    Tourist->>+Frontend: Fills and submits booking form
-    Frontend->>+API: POST /api/v1/tours/{id}/bookings (with booking data)
-    API->>+DB: Check tour availability and capacity for date
+    Tourist->>+Frontend: Navigates to a Tour Detail Page
+    Frontend->>+API: GET /api/v1/tours/{id} (to fetch all tour details, including time slots)
+    API->>+DB: Query for tour details and associated time slots
+    DB-->>-API: Return tour and time slot data
+    API-->>-Frontend: Respond with all necessary page data
+    Frontend-->>-Tourist: Display Tour Details, Date Picker, and the list of Time Slots (e.g., 09:00, 13:00, 15:00)
+
+    Tourist->>+Frontend: Selects a Date, a Time Slot, and fills out the booking form
+    Note over Frontend: Combines selected date and time into a single booking_datetime
+    
+    Tourist->>+Frontend: Submits the booking
+    Frontend->>+API: POST /api/v1/tours/{id}/bookings (with complete booking data)
+    API->>+DB: Check availability (i.e., check for existing bookings at that specific datetime)
     DB-->>-API: Respond with availability
+    Note over API: Validate request...
     API->>+DB: Create booking record with 'pending' status
     DB-->>-API: Confirm booking creation
     API-->>-Frontend: 201 Created
@@ -610,14 +709,19 @@ sequenceDiagram
     participant Storage as Supabase Storage
     participant DB as Supabase DB
 
-    Guide->>+Frontend: Fills out "Create Tour" form with text and images
+    Guide->>+Frontend: Fills out "Create Tour" form with text, images, and time slots (e.g., "09:00", "13:00")
     Frontend->>+Storage: Upload images directly
     Storage-->>-Frontend: Return public URLs for uploaded images
     
     Guide->>+Frontend: Clicks "Save Draft"
-    Frontend->>+API: POST /api/v1/guides/tours (with all tour data + image URLs)
+    Frontend->>+API: POST /api/v1/guides/tours (with all tour data, image URLs, and an array of time slots)
     API->>+DB: Insert new tour record with 'draft' status
-    DB-->>-API: Confirm record creation
+    DB-->>-API: Confirm record creation and return new tour_id
+    
+    loop For each time slot in request
+        API->>DB: Insert time slot into 'tour_time_slots' with the new tour_id
+    end
+
     API-->>-Frontend: 201 Created (with new tour ID)
     Frontend-->>-Guide: Redirect to tour dashboard, show new draft
 ```
@@ -647,15 +751,27 @@ COMMENT ON TABLE public.profiles IS 'Stores public-facing profile information fo
 CREATE TABLE public.categories (
   id uuid NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
   name text NOT NULL UNIQUE,
+  description text,
+  image text,
   created_at timestamptz DEFAULT now()
 );
 COMMENT ON TABLE public.categories IS 'Predefined categories for tours (e.g., Culinary, Adventure).';
+
+-- NEW TABLE: Stores the languages that tours can be conducted in.
+CREATE TABLE public.languages (
+  id uuid NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
+  name text NOT NULL UNIQUE, -- e.g., "English", "Vietnamese"
+  code text NOT NULL UNIQUE,  -- e.g., "en", "vi"
+  created_at timestamptz DEFAULT now()
+);
+COMMENT ON TABLE public.languages IS 'A canonical list of languages for tours.';
 
 -- Tours table for all tour listings
 CREATE TABLE public.tours (
   id uuid NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
   guide_id uuid NOT NULL,
-  category_id uuid NOT NULL,
+  category_id uuid NOT NULL, 
+  timezone text NOT NULL, 
   organization_id uuid, -- For future use
   title text NOT NULL,
   description text,
@@ -677,6 +793,28 @@ CREATE INDEX ON public.tours (guide_id);
 CREATE INDEX ON public.tours (category_id);
 CREATE INDEX ON public.tours (status);
 
+-- STEP 2: Create a new join table for the many-to-many relationship
+CREATE TABLE public.tour_languages (
+  tour_id uuid NOT NULL,
+  language_id uuid NOT NULL,
+  CONSTRAINT tour_languages_pkey PRIMARY KEY (tour_id, language_id), -- Ensures a language is only added once per tour
+  CONSTRAINT tour_languages_tour_id_fkey FOREIGN KEY (tour_id) REFERENCES public.tours (id) ON DELETE CASCADE,
+  CONSTRAINT tour_languages_language_id_fkey FOREIGN KEY (language_id) REFERENCES public.languages (id) ON DELETE CASCADE
+);
+COMMENT ON TABLE public.tour_languages IS 'Links tours to the multiple languages they are offered in.';
+
+-- NEW TABLE: Stores the available appointment times for a specific tour.
+CREATE TABLE public.tour_time_slots (
+  id uuid NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
+  tour_id uuid NOT NULL,
+  start_time time NOT NULL,
+  created_at timestamptz DEFAULT now(),
+  CONSTRAINT tour_time_slots_tour_id_fkey FOREIGN KEY (tour_id) REFERENCES public.tours (id) ON DELETE CASCADE,
+  UNIQUE (tour_id, start_time)
+);
+COMMENT ON TABLE public.tour_time_slots IS 'Stores the available appointment times for a specific tour.';
+CREATE INDEX ON public.tour_time_slots (tour_id);
+
 -- Bookings made by tourists for tours
 CREATE TABLE public.bookings (
   id uuid NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
@@ -688,7 +826,7 @@ CREATE TABLE public.bookings (
   phone text,
   num_adults integer NOT NULL DEFAULT 1,
   num_kids integer NOT NULL DEFAULT 0,
-  booking_date date NOT NULL,
+  booking_datetime timestamptz NOT NULL,
   status text NOT NULL DEFAULT 'pending' CHECK (status IN ('pending', 'confirmed', 'rejected', 'cancelled')),
   created_at timestamptz DEFAULT now(),
   updated_at timestamptz,
