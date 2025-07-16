@@ -1,0 +1,507 @@
+.container {
+  max-width: 100%;
+}
+
+.header {
+  margin-bottom: 2rem;
+}
+
+.title {
+  font-family: var(--font-primary);
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--secondary-text-color);
+  margin: 0 0 0.5rem 0;
+  line-height: 1.2;
+}
+
+.subtitle {
+  font-family: var(--font-secondary);
+  font-size: 1.125rem;
+  color: var(--secondary-text-color);
+  opacity: 0.8;
+  margin: 0;
+  line-height: 1.5;
+}
+
+.loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 2rem;
+  text-align: center;
+}
+
+.loadingSpinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid #e0e0e0;
+  border-top: 3px solid var(--primary-color);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 1rem;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.error {
+  padding: 4rem 2rem;
+  text-align: center;
+}
+
+.error h2 {
+  font-family: var(--font-primary);
+  font-size: 1.5rem;
+  color: var(--secondary-text-color);
+  margin: 0 0 1rem 0;
+}
+
+.error p {
+  font-family: var(--font-secondary);
+  color: var(--secondary-text-color);
+  opacity: 0.8;
+  margin: 0 0 2rem 0;
+}
+
+.retryButton {
+  background-color: var(--primary-color);
+  color: var(--light-background);
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 6px;
+  font-family: var(--font-secondary);
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.retryButton:hover {
+  background-color: #e68a00;
+}
+
+.filterTabs {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 2rem;
+  border-bottom: 1px solid #e0e0e0;
+  overflow-x: auto;
+  padding-bottom: 0;
+}
+
+.filterTab {
+  background: none;
+  border: none;
+  border-bottom: 3px solid transparent;
+  padding: 1rem 1.5rem;
+  font-family: var(--font-secondary);
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--secondary-text-color);
+  opacity: 0.7;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.filterTab:hover {
+  opacity: 1;
+  background-color: rgba(255, 153, 0, 0.05);
+}
+
+.filterTabActive {
+  opacity: 1;
+  color: var(--primary-color);
+  border-bottom-color: var(--primary-color);
+  font-weight: 600;
+}
+
+.content {
+  background-color: var(--light-background);
+  border: 1px solid #e0e0e0;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.emptyState {
+  padding: 4rem 2rem;
+  text-align: center;
+}
+
+.emptyState h2 {
+  font-family: var(--font-primary);
+  font-size: 1.5rem;
+  color: var(--secondary-text-color);
+  margin: 0 0 1rem 0;
+}
+
+.emptyState p {
+  font-family: var(--font-secondary);
+  color: var(--secondary-text-color);
+  opacity: 0.8;
+  margin: 0 0 2rem 0;
+  line-height: 1.6;
+}
+
+.viewAllButton {
+  background-color: var(--primary-color);
+  color: var(--light-background);
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 6px;
+  font-family: var(--font-secondary);
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.viewAllButton:hover {
+  background-color: #e68a00;
+}
+
+.tableContainer {
+  overflow-x: auto;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--font-secondary);
+}
+
+.table th {
+  background-color: #f8f9fa;
+  color: var(--secondary-text-color);
+  font-weight: 600;
+  font-size: 0.875rem;
+  text-align: left;
+  padding: 1rem;
+  border-bottom: 1px solid #e0e0e0;
+  white-space: nowrap;
+}
+
+.table td {
+  padding: 1rem;
+  border-bottom: 1px solid #f0f0f0;
+  vertical-align: top;
+}
+
+.tableRow:hover {
+  background-color: #fafafa;
+}
+
+.tourNameCell {
+  min-width: 200px;
+}
+
+.tourName {
+  font-weight: 600;
+  color: var(--secondary-text-color);
+  line-height: 1.3;
+}
+
+.dateCell {
+  color: var(--secondary-text-color);
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.touristCell {
+  min-width: 180px;
+}
+
+.touristName {
+  font-weight: 600;
+  color: var(--secondary-text-color);
+  margin-bottom: 0.25rem;
+}
+
+.touristEmail {
+  font-size: 0.875rem;
+  color: var(--secondary-text-color);
+  opacity: 0.7;
+}
+
+.participantsCell {
+  text-align: center;
+  min-width: 120px;
+}
+
+.participants {
+  font-weight: 500;
+  color: var(--secondary-text-color);
+  margin-bottom: 0.25rem;
+}
+
+.totalParticipants {
+  font-size: 0.875rem;
+  color: var(--secondary-text-color);
+  opacity: 0.7;
+}
+
+.amountCell {
+  font-weight: 600;
+  color: var(--primary-color);
+  white-space: nowrap;
+  text-align: right;
+}
+
+.statusCell {
+  text-align: center;
+}
+
+.statusBadge {
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 0.3rem 0.6rem;
+  border-radius: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  white-space: nowrap;
+}
+
+.statusPending {
+  background-color: #fff3cd;
+  color: #856404;
+}
+
+.statusConfirmed {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.statusRejected {
+  background-color: #f8d7da;
+  color: #721c24;
+}
+
+.statusCancelled {
+  background-color: #e2e3e5;
+  color: #383d41;
+}
+
+.statusDefault {
+  background-color: #e9ecef;
+  color: #495057;
+}
+
+.actionsCell {
+  white-space: nowrap;
+  min-width: 140px;
+}
+
+.actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.actionButton {
+  border: none;
+  border-radius: 6px;
+  padding: 0.5rem 1rem;
+  font-family: var(--font-secondary);
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-width: 60px;
+}
+
+.actionButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.confirmButton {
+  background-color: #28a745;
+  color: white;
+}
+
+.confirmButton:hover:not(:disabled) {
+  background-color: #218838;
+}
+
+.rejectButton {
+  background-color: #dc3545;
+  color: white;
+}
+
+.rejectButton:hover:not(:disabled) {
+  background-color: #c82333;
+}
+
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.5rem;
+  border-top: 1px solid #e0e0e0;
+  background-color: #fafafa;
+}
+
+.paginationButton {
+  background-color: var(--primary-color);
+  color: var(--light-background);
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 6px;
+  font-family: var(--font-secondary);
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.paginationButton:hover:not(.disabled) {
+  background-color: #e68a00;
+}
+
+.paginationButton.disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.pageInfo {
+  font-family: var(--font-secondary);
+  font-weight: 600;
+  color: var(--secondary-text-color);
+  text-align: center;
+}
+
+.totalCount {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 400;
+  opacity: 0.7;
+  margin-top: 0.25rem;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .title {
+    font-size: 2rem;
+  }
+
+  .subtitle {
+    font-size: 1rem;
+  }
+
+  .filterTabs {
+    gap: 0.25rem;
+  }
+
+  .filterTab {
+    padding: 0.75rem 1rem;
+    font-size: 0.875rem;
+  }
+
+  .table th,
+  .table td {
+    padding: 0.75rem 0.5rem;
+    font-size: 0.875rem;
+  }
+
+  .tourNameCell,
+  .touristCell {
+    min-width: 150px;
+  }
+
+  .participantsCell {
+    min-width: 100px;
+  }
+
+  .actions {
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .actionButton {
+    padding: 0.375rem 0.75rem;
+    font-size: 0.8rem;
+    min-width: 50px;
+  }
+
+  .pagination {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .paginationButton {
+    width: 100%;
+    max-width: 200px;
+  }
+}
+
+@media (max-width: 480px) {
+  .title {
+    font-size: 1.75rem;
+  }
+
+  .table th,
+  .table td {
+    padding: 0.5rem 0.25rem;
+    font-size: 0.8rem;
+  }
+
+  .tourNameCell,
+  .touristCell {
+    min-width: 120px;
+  }
+
+  .statusBadge {
+    font-size: 0.7rem;
+    padding: 0.25rem 0.5rem;
+  }
+
+  .actionButton {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.75rem;
+  }
+}
+
+/* Focus states for accessibility */
+.retryButton:focus,
+.viewAllButton:focus,
+.filterTab:focus,
+.actionButton:focus,
+.paginationButton:focus {
+  outline: 2px solid var(--primary-color);
+  outline-offset: 2px;
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .content {
+    border: 2px solid var(--secondary-text-color);
+  }
+
+  .table th {
+    border-bottom: 2px solid var(--secondary-text-color);
+  }
+
+  .filterTabs {
+    border-bottom: 2px solid var(--secondary-text-color);
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .loadingSpinner {
+    animation: none;
+  }
+
+  .filterTab,
+  .actionButton,
+  .paginationButton,
+  .retryButton,
+  .viewAllButton {
+    transition: none;
+  }
+}

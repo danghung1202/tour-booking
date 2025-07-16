@@ -1,0 +1,213 @@
+.aboutPage {
+  font-family: var(--font-secondary);
+  color: var(--primary-text-color);
+  background-color: var(--dark-background);
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* Hero Section */
+.heroSection {
+  padding: 80px 0 60px;
+  text-align: center;
+  background: linear-gradient(135deg, var(--dark-background) 0%, #2a2a2a 100%);
+}
+
+.headline {
+  font-family: var(--font-primary);
+  font-size: 3rem;
+  font-weight: 700;
+  margin-bottom: 20px;
+  color: var(--primary-text-color);
+  line-height: 1.2;
+}
+
+.subHeadline {
+  font-size: 1.25rem;
+  color: #cccccc;
+  max-width: 600px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+/* Mission Section */
+.missionSection {
+  padding: 80px 0;
+  background-color: var(--dark-background);
+}
+
+.sectionTitle {
+  font-family: var(--font-primary);
+  font-size: 2.5rem;
+  font-weight: 600;
+  margin-bottom: 30px;
+  text-align: center;
+  color: var(--primary-color);
+}
+
+.missionText {
+  font-size: 1.125rem;
+  line-height: 1.8;
+  max-width: 800px;
+  margin: 0 auto;
+  text-align: center;
+  color: var(--primary-text-color);
+}
+
+/* Philosophy Section */
+.philosophySection {
+  padding: 80px 0;
+  background-color: #1a1a1a;
+}
+
+.philosophyGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 40px;
+  margin-top: 50px;
+}
+
+.philosophyCard {
+  background-color: var(--dark-background);
+  padding: 40px 30px;
+  border-radius: 12px;
+  text-align: center;
+  border: 1px solid #333;
+  transition: transform 0.3s ease, border-color 0.3s ease;
+}
+
+.philosophyCard:hover {
+  transform: translateY(-5px);
+  border-color: var(--primary-color);
+}
+
+.iconWrapper {
+  width: 60px;
+  height: 60px;
+  margin: 0 auto 20px;
+  background-color: var(--primary-color);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.icon {
+  width: 30px;
+  height: 30px;
+  color: var(--primary-text-color);
+}
+
+.cardTitle {
+  font-family: var(--font-primary);
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 15px;
+  color: var(--primary-text-color);
+}
+
+.cardText {
+  font-size: 1rem;
+  line-height: 1.6;
+  color: #cccccc;
+}
+
+/* Founders Section */
+.foundersSection {
+  padding: 80px 0;
+  background-color: var(--dark-background);
+}
+
+.foundersText {
+  font-size: 1.125rem;
+  line-height: 1.8;
+  max-width: 700px;
+  margin: 0 auto;
+  text-align: center;
+  color: var(--primary-text-color);
+}
+
+/* Call to Action Section */
+.ctaSection {
+  padding: 80px 0;
+  background: linear-gradient(135deg, #1a1a1a 0%, var(--dark-background) 100%);
+  text-align: center;
+}
+
+.ctaTitle {
+  font-family: var(--font-primary);
+  font-size: 2.5rem;
+  font-weight: 600;
+  margin-bottom: 30px;
+  color: var(--primary-text-color);
+}
+
+.ctaButton {
+  display: inline-block;
+  background-color: var(--primary-color);
+  color: var(--primary-text-color);
+  padding: 15px 40px;
+  font-size: 1.125rem;
+  font-weight: 600;
+  border-radius: 8px;
+  text-decoration: none;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.ctaButton:hover {
+  background-color: #e68a00;
+  transform: translateY(-2px);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .headline {
+    font-size: 2.25rem;
+  }
+
+  .subHeadline {
+    font-size: 1.125rem;
+  }
+
+  .sectionTitle {
+    font-size: 2rem;
+  }
+
+  .philosophyGrid {
+    grid-template-columns: 1fr;
+    gap: 30px;
+  }
+
+  .philosophyCard {
+    padding: 30px 20px;
+  }
+
+  .ctaTitle {
+    font-size: 2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .heroSection {
+    padding: 60px 0 40px;
+  }
+
+  .missionSection,
+  .philosophySection,
+  .foundersSection,
+  .ctaSection {
+    padding: 60px 0;
+  }
+
+  .headline {
+    font-size: 1.875rem;
+  }
+
+  .container {
+    padding: 0 15px;
+  }
+}

@@ -1,0 +1,343 @@
+.container {
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  overflow: hidden;
+  background-color: var(--light-background);
+}
+
+.toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem;
+  background-color: #f8f9fa;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.formatButtons {
+  display: flex;
+  gap: 0.25rem;
+}
+
+.formatButton {
+  background: none;
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  padding: 0.5rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+}
+
+.formatButton:hover:not(:disabled) {
+  background-color: var(--light-background);
+  border-color: var(--primary-color);
+}
+
+.formatButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.formatIcon {
+  font-family: var(--font-secondary);
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--secondary-text-color);
+}
+
+.viewToggle {
+  display: flex;
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.toggleButton {
+  background: none;
+  border: none;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  font-family: var(--font-secondary);
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--secondary-text-color);
+  transition: all 0.2s ease;
+}
+
+.toggleButton:hover:not(:disabled) {
+  background-color: #f0f0f0;
+}
+
+.toggleButton.active {
+  background-color: var(--primary-color);
+  color: var(--light-background);
+}
+
+.toggleButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.editorArea {
+  min-height: 300px;
+}
+
+.textarea {
+  width: 100%;
+  min-height: 300px;
+  padding: 1rem;
+  border: none;
+  outline: none;
+  font-family: var(--font-secondary);
+  font-size: 1rem;
+  line-height: 1.6;
+  color: var(--secondary-text-color);
+  background-color: var(--light-background);
+  resize: vertical;
+}
+
+.textarea:disabled {
+  background-color: #f5f5f5;
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.preview {
+  min-height: 300px;
+  padding: 1rem;
+}
+
+.previewContent {
+  font-family: var(--font-secondary);
+  font-size: 1rem;
+  line-height: 1.6;
+  color: var(--secondary-text-color);
+}
+
+.previewContent h1,
+.previewContent h2,
+.previewContent h3,
+.previewContent h4,
+.previewContent h5,
+.previewContent h6 {
+  font-family: var(--font-primary);
+  color: var(--secondary-text-color);
+  margin: 1.5rem 0 1rem 0;
+}
+
+.previewContent h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.previewContent p {
+  margin: 1rem 0;
+}
+
+.previewContent strong {
+  font-weight: 600;
+}
+
+.previewContent em {
+  font-style: italic;
+}
+
+.previewContent blockquote {
+  border-left: 3px solid var(--primary-color);
+  padding-left: 1rem;
+  margin: 1.5rem 0;
+  font-style: italic;
+  opacity: 0.9;
+}
+
+.previewContent ul,
+.previewContent ol {
+  margin: 1rem 0;
+  padding-left: 2rem;
+}
+
+.previewContent li {
+  margin: 0.5rem 0;
+}
+
+.emptyPreview {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 200px;
+  color: var(--secondary-text-color);
+  opacity: 0.6;
+  font-family: var(--font-secondary);
+  font-style: italic;
+}
+
+.help {
+  border-top: 1px solid #e0e0e0;
+  background-color: #f8f9fa;
+}
+
+.helpDetails {
+  padding: 0.75rem;
+}
+
+.helpSummary {
+  font-family: var(--font-secondary);
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--secondary-text-color);
+  cursor: pointer;
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.helpSummary::-webkit-details-marker {
+  display: none;
+}
+
+.helpSummary::before {
+  content: "▶";
+  font-size: 0.75rem;
+  transition: transform 0.2s ease;
+}
+
+.helpDetails[open] .helpSummary::before {
+  transform: rotate(90deg);
+}
+
+.helpContent {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid #e0e0e0;
+}
+
+.helpGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 0.75rem;
+}
+
+.helpItem {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.helpItem code {
+  font-family: "Courier New", monospace;
+  font-size: 0.8rem;
+  background-color: #e9ecef;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  color: #495057;
+}
+
+.helpItem span {
+  font-family: var(--font-secondary);
+  font-size: 0.8rem;
+  color: var(--secondary-text-color);
+  opacity: 0.8;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .toolbar {
+    flex-direction: column;
+    gap: 0.75rem;
+    align-items: stretch;
+  }
+
+  .formatButtons {
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .viewToggle {
+    align-self: center;
+  }
+
+  .helpGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .formatButtons {
+    gap: 0.125rem;
+  }
+
+  .formatButton {
+    width: 28px;
+    height: 28px;
+  }
+
+  .formatIcon {
+    font-size: 0.75rem;
+  }
+
+  .textarea {
+    padding: 0.75rem;
+    font-size: 0.95rem;
+  }
+
+  .preview {
+    padding: 0.75rem;
+  }
+
+  .previewContent {
+    font-size: 0.95rem;
+  }
+}
+
+/* Focus states for accessibility */
+.formatButton:focus,
+.toggleButton:focus,
+.textarea:focus {
+  outline: 2px solid var(--primary-color);
+  outline-offset: 2px;
+}
+
+.formatButton:focus:not(:focus-visible),
+.toggleButton:focus:not(:focus-visible),
+.textarea:focus:not(:focus-visible) {
+  outline: none;
+}
+
+.formatButton:focus-visible,
+.toggleButton:focus-visible,
+.textarea:focus-visible {
+  outline: 2px solid var(--primary-color);
+  outline-offset: 2px;
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .container {
+    border: 2px solid var(--secondary-text-color);
+  }
+
+  .toolbar,
+  .help {
+    border-color: var(--secondary-text-color);
+  }
+
+  .formatButton,
+  .viewToggle {
+    border: 2px solid var(--secondary-text-color);
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .formatButton,
+  .toggleButton,
+  .helpSummary::before {
+    transition: none;
+  }
+}

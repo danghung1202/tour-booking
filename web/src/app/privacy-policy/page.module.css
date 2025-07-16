@@ -1,0 +1,122 @@
+.container {
+  min-height: 100vh;
+  background-color: var(--light-background);
+  padding: 2rem 1rem;
+}
+
+.content {
+  max-width: 800px;
+  margin: 0 auto;
+  font-family: var(--font-secondary);
+  line-height: 1.6;
+  color: var(--secondary-text-color);
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 3rem;
+  padding-bottom: 2rem;
+  border-bottom: 2px solid var(--primary-color);
+}
+
+.title {
+  font-family: var(--font-primary);
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--secondary-text-color);
+  margin: 0 0 1rem 0;
+}
+
+.lastUpdated {
+  font-size: 1rem;
+  color: #666;
+  margin: 0;
+  font-style: italic;
+}
+
+.section {
+  margin-bottom: 2.5rem;
+}
+
+.sectionTitle {
+  font-family: var(--font-primary);
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--secondary-text-color);
+  margin: 0 0 1rem 0;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.paragraph {
+  font-size: 1rem;
+  margin: 0 0 1rem 0;
+  text-align: justify;
+}
+
+.list {
+  margin: 1rem 0;
+  padding-left: 1.5rem;
+}
+
+.listItem {
+  margin-bottom: 0.75rem;
+  font-size: 1rem;
+}
+
+.listItem strong {
+  color: var(--secondary-text-color);
+  font-weight: 600;
+}
+
+.emailLink {
+  color: var(--primary-color);
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+.emailLink:hover {
+  color: #e68a00;
+  text-decoration: underline;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .container {
+    padding: 1rem 0.5rem;
+  }
+
+  .title {
+    font-size: 2rem;
+  }
+
+  .sectionTitle {
+    font-size: 1.25rem;
+  }
+
+  .paragraph,
+  .listItem {
+    font-size: 0.95rem;
+  }
+
+  .list {
+    padding-left: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .title {
+    font-size: 1.75rem;
+  }
+
+  .sectionTitle {
+    font-size: 1.1rem;
+  }
+
+  .paragraph,
+  .listItem {
+    font-size: 0.9rem;
+    text-align: left;
+  }
+}

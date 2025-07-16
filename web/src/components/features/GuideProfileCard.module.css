@@ -1,0 +1,148 @@
+.guideCard {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  overflow: hidden;
+  margin-bottom: 3rem;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.guideCard:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+.profileSection {
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  gap: 2rem;
+  padding: 2rem;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.imageContainer {
+  position: relative;
+  width: 300px;
+  height: 300px;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.guideImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.guideCard:hover .guideImage {
+  transform: scale(1.05);
+}
+
+.profileInfo {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.guideName {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #1f2937;
+  margin: 0 0 1rem 0;
+  line-height: 1.2;
+}
+
+.guideBio {
+  font-size: 1rem;
+  line-height: 1.7;
+  color: #4b5563;
+  margin: 0;
+}
+
+.toursSection {
+  padding: 2rem;
+}
+
+.toursHeading {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #1f2937;
+  margin: 0 0 1.5rem 0;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid #3b82f6;
+  display: inline-block;
+}
+
+.toursGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+
+/* Mobile Styles */
+@media (max-width: 768px) {
+  .guideCard {
+    margin-bottom: 2rem;
+  }
+
+  .profileSection {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    padding: 1.5rem;
+    text-align: center;
+  }
+
+  .imageContainer {
+    width: 200px;
+    height: 200px;
+    margin: 0 auto;
+  }
+
+  .guideName {
+    font-size: 1.75rem;
+  }
+
+  .guideBio {
+    font-size: 0.95rem;
+    text-align: left;
+  }
+
+  .toursSection {
+    padding: 1.5rem;
+  }
+
+  .toursHeading {
+    font-size: 1.25rem;
+    text-align: center;
+  }
+
+  .toursGrid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .profileSection {
+    padding: 1rem;
+  }
+
+  .toursSection {
+    padding: 1rem;
+  }
+
+  .imageContainer {
+    width: 150px;
+    height: 150px;
+  }
+
+  .guideName {
+    font-size: 1.5rem;
+  }
+
+  .guideBio {
+    font-size: 0.9rem;
+  }
+}
