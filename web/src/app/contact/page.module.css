@@ -1,0 +1,259 @@
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+  font-family: var(--font-secondary);
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.title {
+  font-family: var(--font-primary);
+  font-size: 2.5rem;
+  color: var(--primary-text-color);
+  margin-bottom: 1rem;
+}
+
+.subtitle {
+  font-size: 1.1rem;
+  color: var(--primary-text-color);
+  opacity: 0.8;
+  max-width: 600px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+.content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  align-items: start;
+}
+
+.formColumn,
+.infoColumn {
+  background: var(--light-background);
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.sectionTitle {
+  font-family: var(--font-primary);
+  font-size: 1.8rem;
+  color: var(--secondary-text-color);
+  margin-bottom: 1.5rem;
+  border-bottom: 2px solid var(--primary-color);
+  padding-bottom: 0.5rem;
+}
+
+/* Form Styles */
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+}
+
+.label {
+  font-weight: 600;
+  color: var(--secondary-text-color);
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.input,
+.textarea {
+  padding: 0.75rem;
+  border: 2px solid #e0e0e0;
+  border-radius: 4px;
+  font-size: 1rem;
+  font-family: var(--font-secondary);
+  transition: border-color 0.3s ease;
+}
+
+.input:focus,
+.textarea:focus {
+  outline: none;
+  border-color: var(--primary-color);
+}
+
+.textarea {
+  resize: vertical;
+  min-height: 120px;
+}
+
+.submitButton {
+  background-color: var(--primary-color);
+  color: var(--primary-text-color);
+  border: none;
+  padding: 1rem 2rem;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  font-family: var(--font-secondary);
+}
+
+.submitButton:hover:not(:disabled) {
+  background-color: #e68900;
+}
+
+.submitButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.successMessage {
+  text-align: center;
+  padding: 2rem;
+  background-color: #f0f8f0;
+  border-radius: 8px;
+  border: 2px solid #4caf50;
+}
+
+.successMessage h3 {
+  color: #2e7d32;
+  margin-bottom: 1rem;
+  font-family: var(--font-primary);
+}
+
+.successMessage p {
+  color: var(--secondary-text-color);
+  margin-bottom: 1.5rem;
+}
+
+.resetButton {
+  background-color: var(--primary-color);
+  color: var(--primary-text-color);
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-family: var(--font-secondary);
+  transition: background-color 0.3s ease;
+}
+
+.resetButton:hover {
+  background-color: #e68900;
+}
+
+.errorMessage {
+  background-color: #ffebee;
+  color: #c62828;
+  padding: 1rem;
+  border-radius: 4px;
+  border: 1px solid #ef5350;
+  font-size: 0.9rem;
+}
+
+/* Contact Information Styles */
+.contactDetails {
+  margin-bottom: 2rem;
+}
+
+.contactItem {
+  margin-bottom: 2rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.contactItem:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+.contactLabel {
+  font-family: var(--font-primary);
+  font-size: 1.2rem;
+  color: var(--secondary-text-color);
+  margin-bottom: 0.5rem;
+}
+
+.contactValue {
+  color: var(--secondary-text-color);
+  line-height: 1.6;
+  opacity: 0.9;
+}
+
+.emailLink {
+  color: var(--primary-color);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.emailLink:hover {
+  text-decoration: underline;
+}
+
+/* Map Placeholder */
+.mapContainer {
+  margin-top: 2rem;
+}
+
+.mapPlaceholder {
+  background-color: #f5f5f5;
+  border: 2px dashed #ccc;
+  border-radius: 8px;
+  padding: 3rem 2rem;
+  text-align: center;
+  color: var(--secondary-text-color);
+}
+
+.mapIcon {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+.mapPlaceholder p {
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.mapPlaceholder small {
+  opacity: 0.7;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .content {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .title {
+    font-size: 2rem;
+  }
+
+  .formColumn,
+  .infoColumn {
+    padding: 1.5rem;
+  }
+
+  .container {
+    padding: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .title {
+    font-size: 1.8rem;
+  }
+
+  .sectionTitle {
+    font-size: 1.5rem;
+  }
+
+  .formColumn,
+  .infoColumn {
+    padding: 1rem;
+  }
+}

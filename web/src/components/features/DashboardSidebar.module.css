@@ -1,0 +1,270 @@
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background-color: var(--light-background);
+}
+
+.header {
+  padding: 1.5rem;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.logo {
+  margin-bottom: 0.5rem;
+}
+
+.logoLink {
+  font-family: var(--font-primary);
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--primary-color);
+  text-decoration: none;
+  transition: opacity 0.2s ease;
+}
+
+.logoLink:hover {
+  opacity: 0.8;
+}
+
+.subtitle {
+  font-family: var(--font-secondary);
+  font-size: 0.875rem;
+  color: var(--secondary-text-color);
+  opacity: 0.7;
+  font-weight: 500;
+}
+
+.userInfo {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.5rem;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.userAvatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background-color: var(--primary-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.avatarText {
+  font-family: var(--font-secondary);
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--light-background);
+}
+
+.userDetails {
+  flex: 1;
+  min-width: 0;
+}
+
+.userName {
+  font-family: var(--font-secondary);
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--secondary-text-color);
+  margin: 0 0 0.25rem 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.userRole {
+  font-family: var(--font-secondary);
+  font-size: 0.875rem;
+  color: var(--secondary-text-color);
+  opacity: 0.7;
+  margin: 0;
+}
+
+.navigation {
+  flex: 1;
+  padding: 1rem 0;
+  overflow-y: auto;
+}
+
+.navList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.navLink {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.875rem 1.5rem;
+  color: var(--secondary-text-color);
+  text-decoration: none;
+  font-family: var(--font-secondary);
+  font-size: 0.95rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  border-left: 3px solid transparent;
+}
+
+.navLink:hover {
+  background-color: rgba(255, 153, 0, 0.05);
+  color: var(--primary-color);
+}
+
+.navLinkActive {
+  background-color: rgba(255, 153, 0, 0.1);
+  color: var(--primary-color);
+  border-left-color: var(--primary-color);
+  font-weight: 600;
+}
+
+.navIcon {
+  font-size: 1.125rem;
+  width: 20px;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.navLabel {
+  flex: 1;
+}
+
+.footer {
+  padding: 1.5rem;
+  border-top: 1px solid #e0e0e0;
+  margin-top: auto;
+}
+
+.logoutButton {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+  padding: 0.875rem 1rem;
+  background-color: transparent;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  color: var(--secondary-text-color);
+  font-family: var(--font-secondary);
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.logoutButton:hover:not(:disabled) {
+  background-color: #fee;
+  border-color: #fcc;
+  color: #c33;
+}
+
+.logoutButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.logoutIcon {
+  font-size: 1.125rem;
+  width: 20px;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.logoutText {
+  flex: 1;
+  text-align: left;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .header {
+    padding: 1rem;
+  }
+
+  .userInfo {
+    padding: 1rem;
+  }
+
+  .userAvatar {
+    width: 40px;
+    height: 40px;
+  }
+
+  .avatarText {
+    font-size: 1rem;
+  }
+
+  .userName {
+    font-size: 0.95rem;
+  }
+
+  .userRole {
+    font-size: 0.8rem;
+  }
+
+  .navLink {
+    padding: 0.75rem 1rem;
+    font-size: 0.9rem;
+  }
+
+  .footer {
+    padding: 1rem;
+  }
+
+  .logoutButton {
+    padding: 0.75rem;
+    font-size: 0.9rem;
+  }
+}
+
+/* Focus states for accessibility */
+.logoLink:focus,
+.navLink:focus,
+.logoutButton:focus {
+  outline: 2px solid var(--primary-color);
+  outline-offset: 2px;
+}
+
+.logoLink:focus:not(:focus-visible),
+.navLink:focus:not(:focus-visible),
+.logoutButton:focus:not(:focus-visible) {
+  outline: none;
+}
+
+.logoLink:focus-visible,
+.navLink:focus-visible,
+.logoutButton:focus-visible {
+  outline: 2px solid var(--primary-color);
+  outline-offset: 2px;
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .header,
+  .userInfo,
+  .footer {
+    border-color: var(--secondary-text-color);
+  }
+
+  .logoutButton {
+    border: 2px solid var(--secondary-text-color);
+  }
+
+  .navLinkActive {
+    border-left: 4px solid var(--primary-color);
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .navLink,
+  .logoutButton,
+  .logoLink {
+    transition: none;
+  }
+}
