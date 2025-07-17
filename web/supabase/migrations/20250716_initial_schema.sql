@@ -53,7 +53,7 @@ CREATE TABLE app.tours (
   price numeric(10, 2) NOT NULL DEFAULT 0,
   duration text,
   location text,
-  capacity integer NOT NULL DEFAULT 1,
+  max_participants integer NOT NULL DEFAULT 1,
   status text NOT NULL DEFAULT 'draft' CHECK (status IN ('draft', 'published')),
   images jsonb,
   general_availability_info text,

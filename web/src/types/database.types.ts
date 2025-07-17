@@ -47,7 +47,7 @@ export interface Tour {
   price: number;
   duration: string | null;
   location: string | null;
-  capacity: number;
+  max_participants: number;
   status: TourStatus;
   images: TourImage[] | null;
   general_availability_info: string | null;
