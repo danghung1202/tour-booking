@@ -2,4 +2,4 @@
 .claude/
 .bmad-core/
 web-bundles/
-.specstory/
+.specstory/**
