@@ -42,8 +42,9 @@ Find detailed project documentation in the `/docs` directory:
 
 ## Technology Stack
 
-- **Frontend**: Next.js (React)
-- **Backend**: Next.js API routes
+- **Frontend**: Next.js (React) with TypeScript
+- **Styling**: CSS Modules
+- **Backend**: Next.js API routes, Supabase
 - **Database & Auth**: Supabase (PostgreSQL)
 - **Deployment**: Vercel
 
@@ -51,28 +52,40 @@ Find detailed project documentation in the `/docs` directory:
 
 ### Prerequisites
 
-- Node.js (version TBD)
+- Node.js (v20 or later)
 - npm or yarn
 - Supabase account
+- Vercel account
 
 ### Installation
 
+1. Clone the repository:
 ```bash
-# Clone the repository
-git clone https://github.com/yourusername/tour-booking.git
-
-# Install dependencies
-cd tour-booking
-npm install
-
-# Set up environment variables
-cp .env.example .env.local
+git clone <repository-url>
+cd tour-booking/web
 ```
 
-Configure the following environment variables in `.env.local`:
-- `NEXT_PUBLIC_SUPABASE_URL`
-- `NEXT_PUBLIC_SUPABASE_ANON_KEY`
-- (Additional env variables TBD)
+2. Install dependencies:
+```bash
+npm install
+# or
+yarn install
+```
+
+3. Create a `.env.local` file in the root directory with your Supabase credentials:
+```
+NEXT_PUBLIC_SUPABASE_URL=your-supabase-project-url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your-supabase-anon-key
+```
+
+4. Start the development server:
+```bash
+npm run dev
+# or
+yarn dev
+```
+
+5. Open [http://localhost:3000](http://localhost:3000) in your browser to see the application.
 
 ### Development
 
@@ -83,13 +96,30 @@ npm run dev
 
 Visit `http://localhost:3000` to view the application.
 
+### Deployment
+
+This project is set up for automatic deployment to Vercel:
+
+- Pushes to the `main` branch will deploy to the production environment.
+- Pushes to other branches will create preview deployments.
+
+### Project Structure
+
+- `src/app`: Next.js App Router pages
+- `src/components`: Reusable React components
+- `src/lib`: Utility functions and libraries (including Supabase client)
+
+### CSS Modules
+
+This project uses CSS Modules for component-specific styling. Each component has its own `.module.css` file that is imported and used within the component.
+
 ## Contributing
 
 This project is currently in MVP phase. Contribution guidelines will be added soon.
 
 ## License
 
-[License Type TBD]
+MIT License
 
 ## Contact
 
