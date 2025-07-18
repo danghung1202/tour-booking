@@ -1,5 +1,7 @@
 import { supabase } from '@/lib/supabase';
 import type { User, Session } from '@supabase/supabase-js';
+import type { AuthenticatedUser } from '@/types/database.types';
+import type { Profile } from '@/types/database.types';
 
 export const authService = {
   /**
@@ -50,15 +52,50 @@ export const authService = {
   },
 
   /**
-   * Gets the current user from Supabase.
+   * Gets the current user from Supabase, combined with their profile information.
    */
-  async getCurrentUser(): Promise<User | null> {
-    const { data, error } = await supabase.auth.getUser();
-    if (error) {
-      console.error("Error fetching user:", error);
+  async getCurrentUser(): Promise<AuthenticatedUser | null> {
+    const { data: { user }, error: authError } = await supabase.auth.getUser();
+
+    if (authError || !user) {
+      if (authError) console.error("Error fetching auth user:", authError);
       return null;
     }
-    return data.user;
+
+    try {
+      const { data: profile, error: profileError } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('id', user.id)
+        .single();
+      
+      if (profileError) {
+        console.warn("User profile not found, returning auth data only.", profileError);
+        // Create a default profile structure if none exists
+        const defaultProfile: Profile = {
+          id: user.id,
+          role: 'tourist',
+          name: user.email || 'New User',
+          bio: null,
+          phone: undefined,
+          photo_url: null,
+          created_at: new Date().toISOString(),
+          updated_at: null,
+        };
+        return { ...user, ...defaultProfile, name: defaultProfile.name! };
+      }
+
+      // Merge auth user and profile data
+      return {
+        ...user,
+        ...profile,
+        // Ensure 'name' is never null, falling back to email
+        name: profile.name || user.email || 'New User',
+      };
+    } catch (error) {
+      console.error("Unexpected error fetching user profile:", error);
+      return null;
+    }
   },
 
   /**
@@ -115,5 +152,12 @@ export const authService = {
       console.error("Supabase password update error:", error);
     }
     return { error };
+  },
+
+  /**
+   * Listens for authentication state changes.
+   */
+  onAuthStateChange(callback: (event: string, session: Session | null) => void) {
+    return supabase.auth.onAuthStateChange(callback);
   }
 };

@@ -1,3 +1,5 @@
+import type { User } from "@supabase/supabase-js";
+
 export type UserRole = 'tourist' | 'guide' | 'admin';
 
 export type TourStatus = 'draft' | 'published';
@@ -9,7 +11,7 @@ export interface Profile {
   role: UserRole;
   name: string | null;
   bio: string | null;
-  phone: string | null;
+  phone: string | undefined;
   photo_url: string | null;
   created_at: string; // ISO 8601 timestamp
   updated_at: string | null; // ISO 8601 timestamp
@@ -113,4 +115,6 @@ export interface OrganizationMember {
   role: OrganizationMemberRole;
   created_at: string; // ISO 8601 timestamp
   updated_at: string | null; // ISO 8601 timestamp
-} 
+}
+
+export type AuthenticatedUser = User & Omit<Profile, 'name'> & { name: string }; 

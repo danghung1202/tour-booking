@@ -1,8 +1,8 @@
-import type React from "react"
-import type { Metadata } from "next"
 import { Lora, Montserrat } from "next/font/google"
-import ClientLayout from "./clientLayout"
-import "./globals.css"
+import type { Metadata } from "next";
+import "./globals.css";
+import { AuthProvider } from "@/contexts/AuthContext";
+import ClientLayout from "./clientLayout";
 
 const lora = Lora({
   subsets: ["latin"],
@@ -18,20 +18,21 @@ const montserrat = Montserrat({
 
 export const metadata: Metadata = {
   title: "Tour Booking Platform",
-  description: "Tour Booking Platform",
-  generator: "v0.dev",
-}
+  description: "Find and book amazing tours with local guides",
+};
 
 export default function RootLayout({
   children,
-}: {
-  children: React.ReactNode
-}) {
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
   return (
     <html lang="en" className={`${lora.variable} ${montserrat.variable}`}>
       <body>
-        <ClientLayout>{children}</ClientLayout>
+        <AuthProvider>
+          <ClientLayout>{children}</ClientLayout>
+        </AuthProvider>
       </body>
     </html>
-  )
+  );
 }

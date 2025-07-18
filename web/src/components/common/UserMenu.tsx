@@ -3,16 +3,10 @@
 import { useState, useRef, useEffect } from "react"
 import { authService } from "@/services/authService"
 import styles from "./UserMenu.module.css"
-
-interface User {
-  id: string
-  name: string
-  email: string
-  role: "guide" | "tourist" | "admin"
-}
+import { AuthenticatedUser } from "@/types/database.types"
 
 interface UserMenuProps {
-  user: User
+  user: AuthenticatedUser
 }
 
 export default function UserMenu({ user }: UserMenuProps) {

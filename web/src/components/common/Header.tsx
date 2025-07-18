@@ -5,18 +5,21 @@ import { authService } from "@/services/authService"
 import UserMenu from "./UserMenu"
 import styles from "./Header.module.css"
 import DropdownMenu from "./DropdownMenu"
-
-interface User {
-  id: string
-  name: string
-  email: string
-  role: "guide" | "tourist" | "admin"
-}
+import { useAuth } from "@/contexts/AuthContext"
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
-  const [user, setUser] = useState<User | null>(null)
-  const [isLoading, setIsLoading] = useState(true)
+  const { user, isLoading } = useAuth();
+
+  const handleLogout = async () => {
+    try {
+      await authService.logout()
+      window.location.href = "/"
+    } catch (error) {
+      console.error("Logout error:", error)
+    }
+  }
+  /* const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
     const checkAuth = async () => {
@@ -32,7 +35,7 @@ export default function Header() {
     }
 
     checkAuth()
-  }, [])
+  }, []) */
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen)
@@ -172,16 +175,7 @@ export default function Header() {
                     )}
                     <button
                       className={styles.mobileLogoutButton}
-                      onClick={async () => {
-                        try {
-                          await authService.logout()
-                          setUser(null)
-                          setIsMenuOpen(false)
-                          window.location.href = "/"
-                        } catch (error) {
-                          console.error("Logout error:", error)
-                        }
-                      }}
+                      onClick={handleLogout}
                     >
                       Logout
                     </button>
