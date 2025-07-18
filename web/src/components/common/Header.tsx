@@ -19,23 +19,6 @@ export default function Header() {
       console.error("Logout error:", error)
     }
   }
-  /* const [isLoading, setIsLoading] = useState(true)
-
-  useEffect(() => {
-    const checkAuth = async () => {
-      try {
-        const currentUser = await authService.getCurrentUser()
-        setUser(currentUser)
-      } catch (error) {
-        console.error("Error checking authentication:", error)
-        setUser(null)
-      } finally {
-        setIsLoading(false)
-      }
-    }
-
-    checkAuth()
-  }, []) */
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen)
