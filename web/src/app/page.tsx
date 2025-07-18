@@ -73,7 +73,7 @@ export default async function HomePage() {
           </div>
           <div className={styles.categoriesGrid}>
             {categories.map((category) => (
-              <Link key={category.id} href={`/tours?category=${category.slug}`} className={styles.categoryCard}>
+              <Link key={category.id} href={`/tours?category=${category.id}`} className={styles.categoryCard}>
                 <div className={styles.categoryImageWrapper}>
                   <Image
                     src={category.image || "/placeholder.svg?height=300&width=400"}
