@@ -1,4 +1,5 @@
 import { supabase } from '@/lib/supabase';
+import { createClient } from '@/lib/supabase/client';
 import type { User, Session } from '@supabase/supabase-js';
 import type { AuthenticatedUser } from '@/types/database.types';
 import type { Profile } from '@/types/database.types';
@@ -26,7 +27,9 @@ export const authService = {
    * Logs a user in with Supabase.
    */
   async login(email: string, password: string): Promise<{ user: User | null; session: Session | null; error: any }> {
-    const { data, error } = await supabase.auth.signInWithPassword({
+    const supabaseAuth = createClient();
+
+    const { data, error } = await supabaseAuth.auth.signInWithPassword({
       email,
       password,
     });

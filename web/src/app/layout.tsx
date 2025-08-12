@@ -1,7 +1,6 @@
 import { Lora, Montserrat } from "next/font/google"
 import type { Metadata } from "next";
 import "./globals.css";
-import { AuthProvider } from "@/contexts/AuthContext";
 import ClientLayout from "./clientLayout";
 
 const lora = Lora({
@@ -29,9 +28,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${lora.variable} ${montserrat.variable}`}>
       <body>
-        <AuthProvider>
-          <ClientLayout>{children}</ClientLayout>
-        </AuthProvider>
+        <ClientLayout>{children}</ClientLayout>
       </body>
     </html>
   );

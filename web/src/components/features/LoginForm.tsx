@@ -70,7 +70,9 @@ export default function LoginForm() {
     setErrors({})
 
     try {
-      await authService.login(formData.email, formData.password)
+      const { error } = await authService.login(formData.email, formData.password)
+      if (error) throw error;
+
       router.push("/")
     } catch (error) {
       console.error("Login failed:", error)
