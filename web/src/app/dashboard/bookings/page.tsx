@@ -1,8 +1,9 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { bookingService } from "@/services/bookingService"
+import { BookingService } from "@/services/bookingService"
 import styles from "./page.module.css"
+import { createClient } from "@/lib/supabase/client"
 
 interface BookingWithTourInfo {
   id: string
@@ -25,6 +26,9 @@ type BookingStatus = "pending" | "confirmed" | "rejected" | "cancelled" | "all"
 const BOOKINGS_PER_PAGE = 10
 
 export default function ManageBookingsPage() {
+  const supabase = createClient()
+  const bookingService = new BookingService(supabase)
+  
   const [allBookings, setAllBookings] = useState<BookingWithTourInfo[]>([])
   const [currentPage, setCurrentPage] = useState(1)
   const [statusFilter, setStatusFilter] = useState<BookingStatus>("pending")

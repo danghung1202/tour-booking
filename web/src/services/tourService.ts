@@ -1,4 +1,5 @@
 import type { Tour } from "@/packages/types"
+import { SupabaseClient } from "@supabase/supabase-js";
 
 const mockTours: Tour[] = [
   {
@@ -451,64 +452,114 @@ const mockMyTours: Tour[] = [
   },
 ]
 
-export const tourService = {
+export class TourService {
+  private supabase: SupabaseClient<any, "app", any>;
+
+  constructor(supabaseClient: SupabaseClient<any, "app", any>) {
+    this.supabase = supabaseClient;
+  }
+
   async getAll(): Promise<Tour[]> {
-    // Simulate API delay
-    await new Promise((resolve) => setTimeout(resolve, 1000))
+    try {
+      // Simulate API delay
+      await new Promise((resolve) => setTimeout(resolve, 1000))
 
-    // Simulate occasional API errors for testing
-    if (Math.random() < 0.05) {
-      throw new Error("Failed to fetch tours from API")
+      // In a real app, this would query the database
+      // const { data, error } = await this.supabase.from('tours').select('*')
+      // if (error) throw error
+      // return data as Tour[]
+
+      // Simulate occasional API errors for testing
+      if (Math.random() < 0.05) {
+        throw new Error("Failed to fetch tours from API")
+      }
+
+      return mockTours
+    } catch (error) {
+      console.error("Error fetching tours:", error)
+      return mockTours // Fallback to mock data
     }
-
-    return mockTours
-  },
+  }
 
   async getById(id: string): Promise<Tour> {
-    // Simulate API delay
-    await new Promise((resolve) => setTimeout(resolve, 800))
+    try {
+      // Simulate API delay
+      await new Promise((resolve) => setTimeout(resolve, 800))
 
-    // Simulate occasional API errors for testing
-    if (Math.random() < 0.05) {
-      throw new Error("Failed to fetch tour from API")
+      // In a real app, this would query the database
+      // const { data, error } = await this.supabase
+      //   .from('tours')
+      //   .select('*')
+      //   .eq('id', id)
+      //   .single()
+      // if (error) throw error
+      // return data as Tour
+
+      // Simulate occasional API errors for testing
+      if (Math.random() < 0.05) {
+        throw new Error("Failed to fetch tour from API")
+      }
+
+      const tour = mockTours.find((t) => t.id === id)
+
+      if (!tour) {
+        throw new Error("Tour not found")
+      }
+
+      return tour
+    } catch (error) {
+      console.error("Error fetching tour by ID:", error)
+      throw error
     }
-
-    const tour = mockTours.find((t) => t.id === id)
-
-    if (!tour) {
-      throw new Error("Tour not found")
-    }
-
-    return tour
-
-    // In production, this would be:
-    // const response = await fetch(`/api/v1/tours/${id}`)
-    // if (!response.ok) {
-    //   throw new Error('Failed to fetch tour')
-    // }
-    // return response.json()
-  },
+  }
 
   async getFeaturedTours(): Promise<Tour[]> {
-    console.log("Fetching featured tours...")
+    try {
+      console.log("Fetching featured tours...")
 
-    // Simulate network delay
-    await new Promise((resolve) => setTimeout(resolve, 500))
+      // Simulate network delay
+      await new Promise((resolve) => setTimeout(resolve, 500))
 
-    // Filter tours that are marked as featured
-    const featuredTours = mockTours.filter((tour) => tour.featured)
+      // In a real app, this would query the database
+      // const { data, error } = await this.supabase
+      //   .from('tours')
+      //   .select('*')
+      //   .eq('featured', true)
+      // if (error) throw error
+      // return data as Tour[]
 
-    return Promise.resolve(featuredTours)
-  },
+      // Filter tours that are marked as featured
+      const featuredTours = mockTours.filter((tour) => tour.featured)
+
+      return featuredTours
+    } catch (error) {
+      console.error("Error fetching featured tours:", error)
+      return mockTours.filter((tour) => tour.featured) // Fallback to mock data
+    }
+  }
 
   async getMyTours(): Promise<Tour[]> {
-    console.log("Fetching mock tours for guide...")
+    try {
+      console.log("Fetching tours for guide...")
 
-    // Simulate network delay
-    await new Promise((resolve) => setTimeout(resolve, 500))
+      // Simulate network delay
+      await new Promise((resolve) => setTimeout(resolve, 500))
 
-    return Promise.resolve(mockMyTours)
-  },
+      // In a real app, this would query the database for the current guide's tours
+      // const { data: user } = await this.supabase.auth.getUser()
+      // const { data, error } = await this.supabase
+      //   .from('tours')
+      //   .select('*')
+      //   .eq('guide_id', user.id)
+      // if (error) throw error
+      // return data as Tour[]
+
+      return mockMyTours
+    } catch (error) {
+      console.error("Error fetching guide tours:", error)
+      return mockMyTours // Fallback to mock data
+    }
+  }
 
   async createTour(tourData: {
     title: string
@@ -525,46 +576,45 @@ export const tourService = {
     time_zone: string
     available_time_slots: string[]
   }): Promise<void> {
-    console.log("Creating new tour with data:", tourData)
+    try {
+      console.log("Creating new tour with data:", tourData)
 
-    // Simulate API delay
-    await new Promise((resolve) => setTimeout(resolve, 1500))
+      // Simulate API delay
+      await new Promise((resolve) => setTimeout(resolve, 1500))
 
-    // Simulate occasional API errors for testing
-    if (Math.random() < 0.05) {
-      throw new Error("Failed to create tour - server error")
+      // Validate required fields
+      if (!tourData.languages || tourData.languages.length === 0) {
+        throw new Error("At least one language must be selected")
+      }
+
+      if (!tourData.time_zone) {
+        throw new Error("Time zone must be selected")
+      }
+
+      if (!tourData.available_time_slots || tourData.available_time_slots.length === 0) {
+        throw new Error("At least one time slot must be added")
+      }
+
+      // In a real app, this would insert into the database
+      // const { data: user } = await this.supabase.auth.getUser()
+      // const { data, error } = await this.supabase
+      //   .from('tours')
+      //   .insert({
+      //     ...tourData,
+      //     guide_id: user.id,
+      //     status: 'draft'
+      //   })
+      // if (error) throw error
+
+      // Simulate occasional API errors for testing
+      if (Math.random() < 0.05) {
+        throw new Error("Failed to create tour - server error")
+      }
+
+      console.log("Tour created successfully as draft")
+    } catch (error) {
+      console.error("Error creating tour:", error)
+      throw error
     }
-
-    // Validate required fields
-    if (!tourData.languages || tourData.languages.length === 0) {
-      throw new Error("At least one language must be selected")
-    }
-
-    if (!tourData.time_zone) {
-      throw new Error("Time zone must be selected")
-    }
-
-    if (!tourData.available_time_slots || tourData.available_time_slots.length === 0) {
-      throw new Error("At least one time slot must be added")
-    }
-
-    // In a real implementation, this would make a POST request to the API
-    // const response = await fetch('/api/v1/my-tours', {
-    //   method: 'POST',
-    //   headers: {
-    //     'Content-Type': 'application/json',
-    //     'Authorization': `Bearer ${accessToken}`
-    //   },
-    //   body: JSON.stringify({
-    //     ...tourData,
-    //     status: 'draft'
-    //   })
-    // })
-    //
-    // if (!response.ok) {
-    //   throw new Error('Failed to create tour')
-    // }
-
-    console.log("Tour created successfully as draft")
-  },
+  }
 }

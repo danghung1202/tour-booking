@@ -2,25 +2,22 @@
 
 import { useState } from "react"
 import { useRouter, usePathname } from "next/navigation"
-import { authService } from "@/services/authService"
+import { AuthService } from "@/services/authService"
+import { AuthenticatedUser } from "@/types/database.types"
 import styles from "./DashboardSidebar.module.css"
-
-type User = {
-  id: string
-  email: string
-  role: string
-  name: string
-}
+import { createClient } from "@/lib/supabase/client"
 
 type DashboardSidebarProps = {
-  user: User
+  user: AuthenticatedUser | null
 }
 
 export default function DashboardSidebar({ user }: DashboardSidebarProps) {
   const router = useRouter()
   const pathname = usePathname()
   const [isLoggingOut, setIsLoggingOut] = useState(false)
-
+  const supabase = createClient()
+  const authService = new AuthService(supabase)
+  
   const navigationLinks = [
     {
       href: "/dashboard",
@@ -87,10 +84,10 @@ export default function DashboardSidebar({ user }: DashboardSidebarProps) {
       {/* User Info */}
       <div className={styles.userInfo}>
         <div className={styles.userAvatar}>
-          <span className={styles.avatarText}>{user.name.charAt(0).toUpperCase()}</span>
+          <span className={styles.avatarText}>{user?.name.charAt(0).toUpperCase()}</span>
         </div>
         <div className={styles.userDetails}>
-          <div className={styles.userName}>{user.name}</div>
+          <div className={styles.userName}>{user?.name}</div>
           <div className={styles.userRole}>Tour Guide</div>
         </div>
       </div>

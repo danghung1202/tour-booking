@@ -1,3 +1,5 @@
+import { SupabaseClient } from "@supabase/supabase-js";
+
 // Mock availability data - in production this would come from the API
 const mockUnavailableDates: Record<string, string[]> = {
   "tour-01": ["2024-02-15", "2024-02-16", "2024-02-20", "2024-02-25", "2024-03-01", "2024-03-05"],
@@ -7,128 +9,147 @@ const mockUnavailableDates: Record<string, string[]> = {
   "tour-05": ["2024-02-19", "2024-02-24", "2024-03-01", "2024-03-09", "2024-03-10"],
 }
 
-export const availabilityService = {
+export class AvailabilityService {
+  private supabase: SupabaseClient<any, "app", any>;
+
+  constructor(supabaseClient: SupabaseClient<any, "app", any>) {
+    this.supabase = supabaseClient;
+  }
+
   /**
    * Fetch unavailable dates for a specific tour
    */
   async getUnavailableDates(tourId: string): Promise<string[]> {
-    console.log("Fetching unavailable dates for tour:", tourId)
+    try {
+      console.log("Fetching unavailable dates for tour:", tourId)
 
-    // Simulate API delay
-    await new Promise((resolve) => setTimeout(resolve, 500))
+      // Simulate API delay
+      await new Promise((resolve) => setTimeout(resolve, 500))
 
-    // Simulate occasional API errors for testing
-    if (Math.random() < 0.02) {
-      throw new Error("Failed to fetch availability data")
+      // In a real app, this would use the Supabase client to fetch availability data
+      // const { data, error } = await this.supabase
+      //   .from('tour_unavailable_dates')
+      //   .select('date')
+      //   .eq('tour_id', tourId)
+      // if (error) throw error
+      // return data.map(item => item.date)
+
+      // Simulate occasional API errors for testing
+      if (Math.random() < 0.02) {
+        throw new Error("Failed to fetch availability data")
+      }
+
+      const unavailableDates = mockUnavailableDates[tourId] || []
+      console.log(`Found ${unavailableDates.length} unavailable dates for tour ${tourId}`)
+
+      return unavailableDates
+    } catch (error) {
+      console.error("Error fetching unavailable dates:", error)
+      throw error
     }
-
-    const unavailableDates = mockUnavailableDates[tourId] || []
-    console.log(`Found ${unavailableDates.length} unavailable dates for tour ${tourId}`)
-
-    return unavailableDates
-
-    // In production, this would be:
-    // const response = await fetch(`/api/v1/tours/${tourId}/availability`)
-    // if (!response.ok) {
-    //   throw new Error('Failed to fetch availability data')
-    // }
-    // return response.json()
-  },
+  }
 
   /**
    * Block a specific date for a tour
    */
   async addUnavailableDate(tourId: string, date: string): Promise<void> {
-    console.log(`Blocking date ${date} for tour ${tourId}`)
+    try {
+      console.log(`Blocking date ${date} for tour ${tourId}`)
 
-    // Simulate API delay
-    await new Promise((resolve) => setTimeout(resolve, 300))
+      // Simulate API delay
+      await new Promise((resolve) => setTimeout(resolve, 300))
 
-    // Simulate occasional API errors for testing
-    if (Math.random() < 0.02) {
-      throw new Error("Failed to block date")
+      // In a real app, this would use the Supabase client to add an unavailable date
+      // const { error } = await this.supabase
+      //   .from('tour_unavailable_dates')
+      //   .insert({
+      //     tour_id: tourId,
+      //     date: date,
+      //     created_at: new Date().toISOString()
+      //   })
+      // if (error) throw error
+
+      // Simulate occasional API errors for testing
+      if (Math.random() < 0.02) {
+        throw new Error("Failed to block date")
+      }
+
+      // Update mock data
+      if (!mockUnavailableDates[tourId]) {
+        mockUnavailableDates[tourId] = []
+      }
+
+      if (!mockUnavailableDates[tourId].includes(date)) {
+        mockUnavailableDates[tourId].push(date)
+        mockUnavailableDates[tourId].sort() // Keep dates sorted
+      }
+
+      console.log(`Date ${date} blocked successfully for tour ${tourId}`)
+    } catch (error) {
+      console.error("Error blocking date:", error)
+      throw error
     }
-
-    // Update mock data
-    if (!mockUnavailableDates[tourId]) {
-      mockUnavailableDates[tourId] = []
-    }
-
-    if (!mockUnavailableDates[tourId].includes(date)) {
-      mockUnavailableDates[tourId].push(date)
-      mockUnavailableDates[tourId].sort() // Keep dates sorted
-    }
-
-    console.log(`Date ${date} blocked successfully for tour ${tourId}`)
-
-    // In production, this would be:
-    // const response = await fetch(`/api/v1/tours/${tourId}/availability`, {
-    //   method: 'POST',
-    //   headers: {
-    //     'Content-Type': 'application/json',
-    //     'Authorization': `Bearer ${accessToken}`
-    //   },
-    //   body: JSON.stringify({ date })
-    // })
-    // if (!response.ok) {
-    //   throw new Error('Failed to block date')
-    // }
-  },
+  }
 
   /**
    * Unblock a specific date for a tour
    */
   async removeUnavailableDate(tourId: string, date: string): Promise<void> {
-    console.log(`Unblocking date ${date} for tour ${tourId}`)
+    try {
+      console.log(`Unblocking date ${date} for tour ${tourId}`)
 
-    // Simulate API delay
-    await new Promise((resolve) => setTimeout(resolve, 300))
+      // Simulate API delay
+      await new Promise((resolve) => setTimeout(resolve, 300))
 
-    // Simulate occasional API errors for testing
-    if (Math.random() < 0.02) {
-      throw new Error("Failed to unblock date")
-    }
+      // In a real app, this would use the Supabase client to remove an unavailable date
+      // const { error } = await this.supabase
+      //   .from('tour_unavailable_dates')
+      //   .delete()
+      //   .eq('tour_id', tourId)
+      //   .eq('date', date)
+      // if (error) throw error
 
-    // Update mock data
-    if (mockUnavailableDates[tourId]) {
-      const index = mockUnavailableDates[tourId].indexOf(date)
-      if (index > -1) {
-        mockUnavailableDates[tourId].splice(index, 1)
+      // Simulate occasional API errors for testing
+      if (Math.random() < 0.02) {
+        throw new Error("Failed to unblock date")
       }
+
+      // Update mock data
+      if (mockUnavailableDates[tourId]) {
+        const index = mockUnavailableDates[tourId].indexOf(date)
+        if (index > -1) {
+          mockUnavailableDates[tourId].splice(index, 1)
+        }
+      }
+
+      console.log(`Date ${date} unblocked successfully for tour ${tourId}`)
+    } catch (error) {
+      console.error("Error unblocking date:", error)
+      throw error
     }
-
-    console.log(`Date ${date} unblocked successfully for tour ${tourId}`)
-
-    // In production, this would be:
-    // const response = await fetch(`/api/v1/tours/${tourId}/availability`, {
-    //   method: 'DELETE',
-    //   headers: {
-    //     'Content-Type': 'application/json',
-    //     'Authorization': `Bearer ${accessToken}`
-    //   },
-    //   body: JSON.stringify({ date })
-    // })
-    // if (!response.ok) {
-    //   throw new Error('Failed to unblock date')
-    // }
-  },
+  }
 
   /**
    * Get availability statistics for a tour
    */
   async getAvailabilityStats(tourId: string): Promise<{ totalBlocked: number; upcomingBlocked: number }> {
-    const unavailableDates = await this.getUnavailableDates(tourId)
-    const today = new Date()
-    today.setHours(0, 0, 0, 0)
+    try {
+      const unavailableDates = await this.getUnavailableDates(tourId)
+      const today = new Date()
+      today.setHours(0, 0, 0, 0)
 
-    const upcomingBlocked = unavailableDates.filter((dateStr) => {
-      const date = new Date(dateStr)
-      return date >= today
-    }).length
+      const upcomingBlocked = unavailableDates.filter((dateStr) => {
+        const date = new Date(dateStr)
+        return date >= today
+      }).length
 
-    return {
-      totalBlocked: unavailableDates.length,
-      upcomingBlocked,
+      return {
+        totalBlocked: unavailableDates.length,
+        upcomingBlocked,
+      }
+    } catch (error) {
+      console.error("Error getting availability stats:", error)
+      throw error
     }
-  },
+  }
 }

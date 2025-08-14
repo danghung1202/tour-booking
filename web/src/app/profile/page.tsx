@@ -2,14 +2,18 @@
 
 import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
-import { authService } from "@/services/authService"
-import { profileService } from "@/services/profileService"
+import { AuthService } from "@/services/authService"
+import { ProfileService } from "@/services/profileService"
 import type { Profile } from "@/packages/types"
 import styles from "./page.module.css"
+import { createClient } from "@/lib/supabase/client"
 
 export default function ProfilePage() {
   const router = useRouter()
-
+  const supabase = createClient()
+  const authService = new AuthService(supabase)
+  const profileService = new ProfileService(supabase)
+  
   // Authentication state
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null)
   const [currentUser, setCurrentUser] = useState<any>(null)

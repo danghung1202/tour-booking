@@ -1,12 +1,15 @@
 "use client"
 
-import { tourService } from "@/services/tourService"
+import { TourService } from "@/services/tourService"
 import TourCard from "@/components/common/TourCard"
 import type { Tour } from "@/packages/types"
 import styles from "./page.module.css"
 import { useEffect, useState } from "react"
+import { createClient } from "@/lib/supabase/client"
 
 export default function ToursClientPage() {
+  const supabase = createClient()
+  const tourService = new TourService(supabase)
   const [tours, setTours] = useState<Tour[]>([])
   const [hasError, setHasError] = useState(false)
 

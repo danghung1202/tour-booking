@@ -1,3 +1,5 @@
+import { SupabaseClient } from "@supabase/supabase-js";
+
 // Mock data for guides with their tours
 const mockGuidesWithTours = [
   {
@@ -115,13 +117,24 @@ export interface GuideWithTours {
   tours: TourSnippet[]
 }
 
-export const guideService = {
+export class GuideService {
+  private supabase: SupabaseClient<any, "app", any>;
+
+  constructor(supabaseClient: SupabaseClient<any, "app", any>) {
+    this.supabase = supabaseClient;
+  }
+
   async getAllGuidesWithTours(): Promise<GuideWithTours[]> {
     // Simulate API delay
     await new Promise((resolve) => setTimeout(resolve, 500))
 
-    // In a real app, this would make an API call to GET /api/v1/guides
-    // The API would return only guides with role 'guide' and only published tours
-    return mockGuidesWithTours
-  },
+    try {
+      // In a real app, this would query the database
+      // For now, return mock data
+      return mockGuidesWithTours;
+    } catch (error) {
+      console.error("Error fetching guides with tours:", error);
+      return mockGuidesWithTours;
+    }
+  }
 }

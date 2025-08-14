@@ -1,21 +1,18 @@
 "use client"
 
 import { useState, useRef, useEffect } from "react"
-import { authService } from "@/services/authService"
+import { AuthService } from "@/services/authService"
 import styles from "./UserMenu.module.css"
-
-interface User {
-  id: string
-  name: string
-  email: string
-  role: "guide" | "tourist" | "admin"
-}
+import { AuthenticatedUser } from "@/types/database.types"
+import { createClient } from "@/lib/supabase/client"
 
 interface UserMenuProps {
-  user: User
+  user: AuthenticatedUser
 }
 
 export default function UserMenu({ user }: UserMenuProps) {
+  const supabase = createClient()
+  const authService = new AuthService(supabase)
   const [isOpen, setIsOpen] = useState(false)
   const [isLoggingOut, setIsLoggingOut] = useState(false)
   const menuRef = useRef<HTMLDivElement>(null)
