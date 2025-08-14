@@ -1,14 +1,14 @@
-import { supabase } from '@/lib/supabase';
 import { createClient } from '@/lib/supabase/client';
 import type { User, Session } from '@supabase/supabase-js';
 import type { AuthenticatedUser } from '@/types/database.types';
-import type { Profile } from '@/types/database.types';
 
-export const authService = {
+// Client-side service for authentication operations
+export const authClientService = {
   /**
    * Registers a new user with Supabase.
    */
   async register(email: string, password: string): Promise<{ user: User | null; session: Session | null; error: any }> {
+    const supabase = createClient();
     const { data, error } = await supabase.auth.signUp({
       email,
       password,
@@ -47,7 +47,8 @@ export const authService = {
    * Logs the current user out.
    */
   async logout(): Promise<{ error: any }> {
-    const { error } = await supabase.auth.signOut();
+    const supabaseAuth = createClient();
+    const { error } = await supabaseAuth.auth.signOut();
     if (error) {
       console.error("Supabase logout error:", error);
     }
@@ -57,54 +58,22 @@ export const authService = {
   /**
    * Gets the current user from Supabase, combined with their profile information.
    */
-  async getCurrentUser(): Promise<AuthenticatedUser | null> {
+  async getCurrentUser(): Promise<User | null> {
+    const supabase = createClient();
     const { data: { user }, error: authError } = await supabase.auth.getUser();
 
     if (authError || !user) {
       if (authError) console.error("Error fetching auth user:", authError);
       return null;
     }
-
-    try {
-      const { data: profile, error: profileError } = await supabase
-        .from('profiles')
-        .select('*')
-        .eq('id', user.id)
-        .single();
-      
-      if (profileError) {
-        console.warn("User profile not found, returning auth data only.", profileError);
-        // Create a default profile structure if none exists
-        const defaultProfile: Profile = {
-          id: user.id,
-          role: 'tourist',
-          name: user.email || 'New User',
-          bio: null,
-          phone: undefined,
-          photo_url: null,
-          created_at: new Date().toISOString(),
-          updated_at: null,
-        };
-        return { ...user, ...defaultProfile, name: defaultProfile.name! };
-      }
-
-      // Merge auth user and profile data
-      return {
-        ...user,
-        ...profile,
-        // Ensure 'name' is never null, falling back to email
-        name: profile.name || user.email || 'New User',
-      };
-    } catch (error) {
-      console.error("Unexpected error fetching user profile:", error);
-      return null;
-    }
+    return user;
   },
 
   /**
    * Gets the current session from Supabase.
    */
   async getSession(): Promise<Session | null> {
+    const supabase = createClient();
     const { data, error } = await supabase.auth.getSession();
     if (error) {
       console.error("Error fetching session:", error);
@@ -122,32 +91,10 @@ export const authService = {
   },
 
   /**
-   * Gets the current user's role from the profiles table.
-   */
-  async getUserRole(): Promise<string | null> {
-    const user = await this.getCurrentUser();
-    if (!user) return null;
-
-    try {
-      const { data, error } = await supabase
-        .from('profiles')
-        .select('role')
-        .eq('id', user.id)
-        .single();
-      
-      if (error) throw error;
-      
-      return data?.role || null;
-    } catch (error) {
-      console.error("Error fetching user role:", error);
-      return null;
-    }
-  },
-
-  /**
    * Updates the current user's password in Supabase.
    */
   async updatePassword(newPassword: string): Promise<{ error: any }> {
+    const supabase = createClient();
     const { error } = await supabase.auth.updateUser({
       password: newPassword
     });
@@ -161,6 +108,9 @@ export const authService = {
    * Listens for authentication state changes.
    */
   onAuthStateChange(callback: (event: string, session: Session | null) => void) {
+    const supabase = createClient();
     return supabase.auth.onAuthStateChange(callback);
   }
 };
+
+

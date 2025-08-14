@@ -3,7 +3,7 @@
 import type React from "react"
 import { useState } from "react"
 import { useRouter } from "next/navigation"
-import { authService } from "@/services/authService"
+import { authClientService } from "@/services/authClientService"
 import styles from "./RegisterForm.module.css"
 
 type FormData = {
@@ -84,9 +84,9 @@ export default function RegisterForm() {
     setErrors({})
 
     try {
-      await authService.register(formData.email, formData.password)
+      await authClientService.register(formData.email, formData.password)
       // User is automatically logged in after successful registration
-      router.push("/")
+      window.location.href = "/"
     } catch (error) {
       console.error("Registration failed:", error)
       setErrors({

@@ -3,7 +3,7 @@
 import type React from "react"
 import { useState } from "react"
 import { useRouter } from "next/navigation"
-import { authService } from "@/services/authService"
+import { authClientService } from "@/services/authClientService"
 import styles from "./LoginForm.module.css"
 
 type FormData = {
@@ -70,10 +70,10 @@ export default function LoginForm() {
     setErrors({})
 
     try {
-      const { error } = await authService.login(formData.email, formData.password)
+      const { error } = await authClientService.login(formData.email, formData.password)
       if (error) throw error;
 
-      router.push("/")
+      window.location.href = "/"
     } catch (error) {
       console.error("Login failed:", error)
       setErrors({

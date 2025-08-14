@@ -1,8 +1,8 @@
 import type React from "react"
 import { redirect } from "next/navigation"
-import { authService } from "@/services/authService"
 import DashboardSidebar from "@/components/features/DashboardSidebar"
 import styles from "./layout.module.css"
+import { authServerService } from "@/services/authServerService"
 
 export const metadata = {
   title: "Guide Dashboard - Unique Tours",
@@ -15,7 +15,7 @@ export default async function DashboardLayout({
   children: React.ReactNode
 }) {
   // Check authentication
-  const user = await authService.getCurrentUser()
+  const user = await authServerService.getCurrentUser()
 
   if (!user) {
     redirect("/login")

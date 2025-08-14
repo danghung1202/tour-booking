@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
-import { authService } from "@/services/authService"
+import { authClientService } from "@/services/authClientService"
 import { profileService } from "@/services/profileService"
 import type { Profile } from "@/packages/types"
 import styles from "./page.module.css"
@@ -41,7 +41,7 @@ export default function ProfilePage() {
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        const user = await authService.getCurrentUser()
+        const user = await authClientService.getCurrentUser()
         if (!user) {
           router.push("/login")
           return
@@ -187,7 +187,7 @@ export default function ProfilePage() {
       }
 
       // Update password
-      await authService.updatePassword(passwordForm.newPassword)
+      await authClientService.updatePassword(passwordForm.newPassword)
 
       // Clear form
       setPasswordForm({

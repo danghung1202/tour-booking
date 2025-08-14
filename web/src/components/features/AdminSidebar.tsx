@@ -2,7 +2,7 @@
 
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
-import { authService } from "@/services/authService"
+import { authClientService } from "@/services/authClientService"
 import styles from "./AdminSidebar.module.css"
 
 export default function AdminSidebar() {
@@ -11,7 +11,7 @@ export default function AdminSidebar() {
 
   const handleLogout = async () => {
     try {
-      await authService.logout()
+      await authClientService.logout()
       router.push("/")
     } catch (error) {
       console.error("Logout error:", error)

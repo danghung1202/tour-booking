@@ -2,18 +2,12 @@
 
 import { useState } from "react"
 import { useRouter, usePathname } from "next/navigation"
-import { authService } from "@/services/authService"
+import { authClientService } from "@/services/authClientService"
+import { AuthenticatedUser } from "@/types/database.types"
 import styles from "./DashboardSidebar.module.css"
 
-type User = {
-  id: string
-  email: string
-  role: string
-  name: string
-}
-
 type DashboardSidebarProps = {
-  user: User
+  user: AuthenticatedUser | null
 }
 
 export default function DashboardSidebar({ user }: DashboardSidebarProps) {
@@ -54,7 +48,7 @@ export default function DashboardSidebar({ user }: DashboardSidebarProps) {
 
     setIsLoggingOut(true)
     try {
-      await authService.logout()
+      await authClientService.logout()
       router.push("/login")
     } catch (error) {
       console.error("Logout failed:", error)
@@ -87,10 +81,10 @@ export default function DashboardSidebar({ user }: DashboardSidebarProps) {
       {/* User Info */}
       <div className={styles.userInfo}>
         <div className={styles.userAvatar}>
-          <span className={styles.avatarText}>{user.name.charAt(0).toUpperCase()}</span>
+          <span className={styles.avatarText}>{user?.name.charAt(0).toUpperCase()}</span>
         </div>
         <div className={styles.userDetails}>
-          <div className={styles.userName}>{user.name}</div>
+          <div className={styles.userName}>{user?.name}</div>
           <div className={styles.userRole}>Tour Guide</div>
         </div>
       </div>

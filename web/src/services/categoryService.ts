@@ -1,5 +1,5 @@
 import type { Category } from "@/types/database.types";
-import { categoriesTable, getAllCategories } from "@/lib/database";
+import { createClient } from "@/lib/supabase/server";
 
 // Keep mock data for fallback and development purposes
 const mockCategories: Category[] = [
@@ -45,8 +45,9 @@ export const categoryService = {
     console.log("Fetching all categories from database...");
 
     try {
+      const supabase = await createClient();
       // Use the database helper function to get all categories
-      const categories = await getAllCategories();
+      const {data: categories, error} = await supabase.from('categories').select('*')
       
       // If we got categories from the database, return them
       if (categories && categories.length > 0) {
@@ -70,10 +71,8 @@ export const categoryService = {
 
     try {
       // Query the database for the category with the given ID
-      const { data, error } = await categoriesTable()
-        .select('*')
-        .eq('id', id)
-        .single();
+      const supabase = await createClient();
+      const { data, error } = await supabase.from('categories').select('*').eq('id', id).single();
       
       if (error) {
         throw error;

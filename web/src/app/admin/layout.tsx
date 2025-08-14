@@ -1,8 +1,8 @@
 import type React from "react"
 import { redirect } from "next/navigation"
-import { authService } from "@/services/authService"
 import AdminSidebar from "@/components/features/AdminSidebar"
 import styles from "./layout.module.css"
+import { authServerService } from "@/services/authServerService"
 
 export default async function AdminLayout({
   children,
@@ -10,10 +10,10 @@ export default async function AdminLayout({
   children: React.ReactNode
 }) {
   // Check authentication and authorization
-  const user = await authService.getCurrentUser()
+  const user = await authServerService.getCurrentUser();
 
   // Redirect if not authenticated or not an admin
-  if (!user || user.role !== "admin") {
+  if (!user || user?.role !== "admin") {
     redirect("/")
   }
 
