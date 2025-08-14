@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useRef, useEffect } from "react"
-import { authService } from "@/services/authService"
+import { authClientService } from "@/services/authClientService"
 import styles from "./UserMenu.module.css"
 import { AuthenticatedUser } from "@/types/database.types"
 
@@ -49,7 +49,7 @@ export default function UserMenu({ user }: UserMenuProps) {
   const handleLogout = async () => {
     setIsLoggingOut(true)
     try {
-      await authService.logout()
+      await authClientService.logout()
       window.location.href = "/"
     } catch (error) {
       console.error("Logout error:", error)
