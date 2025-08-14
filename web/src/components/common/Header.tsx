@@ -1,10 +1,13 @@
-import { authServerService } from "@/services/authServerService";
+import { createClient } from "@/lib/supabase/server";
+import { AuthService } from "@/services/authService";
 import styles from "./Header.module.css"
 import DesktopNav from "./header/DesktopNav"
 import MobileMenu from "./header/MobileMenu"
 
 export default async function Header() {
-  const user = await authServerService.getCurrentUser()
+  const supabase = await createClient()
+  const authService = new AuthService(supabase)
+  const user = await authService.getCurrentUser()
 
   const navigationLinks = [
     { href: "/tours", label: "Tours" },

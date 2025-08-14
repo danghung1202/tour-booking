@@ -1,24 +1,28 @@
-import Link from "next/link"
-import Image from "next/image"
-import { tourService } from "@/services/tourService"
-import { CategoryService } from "@/services/categoryService"
-import { guideService } from "@/services/guideService"
-import TourCard from "@/components/common/TourCard"
-import styles from "./page.module.css"
-import { createClient } from "@/lib/supabase/server"
+import { createClient } from '@/lib/supabase/server';
+import { TourService } from '@/services/tourService';
+import { CategoryService } from '@/services/categoryService';
+import { GuideService } from '@/services/guideService';
+import TourCard from "@/components/common/TourCard";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
+import Image from "next/image";
+import styles from "./page.module.css";
 
 export default async function HomePage() {
   const supabase = await createClient();
+  const tourService = new TourService(supabase);
   const categoryService = new CategoryService(supabase);
+  const guideService = new GuideService(supabase);
+
   // Fetch data for dynamic sections
   const [featuredTours, categories, featuredGuides] = await Promise.all([
     tourService.getFeaturedTours(),
     categoryService.getAll(),
     guideService.getAllGuidesWithTours(),
-  ])
+  ]);
 
   // Get first 3 guides for the featured section
-  const guidesToShow = featuredGuides.slice(0, 3)
+  const guidesToShow = featuredGuides.slice(0, 3);
 
   return (
     <div className={styles.homepage}>

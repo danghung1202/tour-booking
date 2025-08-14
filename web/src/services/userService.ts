@@ -1,85 +1,72 @@
-import type { User, Session } from '@supabase/supabase-js';
+import type { User, SupabaseClient } from '@supabase/supabase-js';
 import type { AuthenticatedUser } from '@/types/database.types';
 import type { Profile } from '@/types/database.types';
-import { createClient } from '@/lib/supabase/server';
 
-export const userService = {
+export class UserService {
+  private supabase: SupabaseClient<any, "app", any>;
 
-    async getUserProfile(user: User | null): Promise<AuthenticatedUser | null> {
-        if (!user) return null;
+  constructor(supabaseClient: SupabaseClient<any, "app", any>) {
+    this.supabase = supabaseClient;
+  }
 
-        try {
-            const supabase = await createClient();
-            const { data: profile, error: profileError } = await supabase
-                .from('profiles')
-                .select('*')
-                .eq('id', user.id)
-                .single();
+  async getUserProfile(user: User | null): Promise<AuthenticatedUser | null> {
+    if (!user) return null;
 
-            if (profileError) {
-                console.warn("User profile not found, returning auth data only.", profileError);
-                // Create a default profile structure if none exists
-                const defaultProfile: Profile = {
-                    id: user.id,
-                    role: 'tourist',
-                    name: user.email || 'New User',
-                    bio: null,
-                    phone: undefined,
-                    photo_url: null,
-                    created_at: new Date().toISOString(),
-                    updated_at: null,
-                };
-                return { ...user, ...defaultProfile, name: defaultProfile.name! } as AuthenticatedUser;
-            }
+    try {
+      const { data: profile, error: profileError } = await this.supabase
+        .from('profiles')
+        .select('*')
+        .eq('id', user.id)
+        .single();
 
-            // Merge auth user and profile data
-            return {
-                ...user,
-                ...profile,
-                // Ensure 'name' is never null, falling back to email
-                name: profile.name || user.email || 'New User',
-            };
-        } catch (error) {
-            console.error("Unexpected error fetching user profile:", error);
-            return null;
-        }
-    },
+      if (profileError) {
+        console.warn("User profile not found, returning auth data only.", profileError);
+        // Create a default profile structure if none exists
+        const defaultProfile: Profile = {
+          id: user.id,
+          role: 'tourist',
+          name: user.email || 'New User',
+          bio: null,
+          phone: undefined,
+          photo_url: null,
+          created_at: new Date().toISOString(),
+          updated_at: null,
+        };
+        return { ...user, ...defaultProfile, name: defaultProfile.name! } as AuthenticatedUser;
+      }
 
-    /**
-     * Gets the current user's role from the profiles table.
-     */
-    async getUserRole(user: User | null): Promise<string | null> {
-        if (!user) return null;
+      // Merge auth user and profile data
+      return {
+        ...user,
+        ...profile,
+        // Ensure 'name' is never null, falling back to email
+        name: profile.name || user.email || 'New User',
+      };
+    } catch (error) {
+      console.error("Unexpected error fetching user profile:", error);
+      return null;
+    }
+  }
 
-        try {
-            const supabase = await createClient();
-            const { data, error } = await supabase
-                .from('profiles')
-                .select('role')
-                .eq('id', user.id)
-                .single();
+  /**
+   * Gets the current user's role from the profiles table.
+   */
+  async getUserRole(user: User | null): Promise<string | null> {
+    if (!user) return null;
 
-            if (error) throw error;
+    try {
+      const { data, error } = await this.supabase
+        .from('profiles')
+        .select('role')
+        .eq('id', user.id)
+        .single();
 
-            return data?.role || null;
-        } catch (error) {
-            console.error("Error fetching user role:", error);
-            return null;
-        }
-    },
+      if (error) throw error;
 
-    /**
-     * Updates the current user's password in Supabase.
-     */
-    async updatePassword(newPassword: string): Promise<{ error: any }> {
-        const supabase = await createClient();
-        const { error } = await supabase.auth.updateUser({
-            password: newPassword
-        });
-        if (error) {
-            console.error("Supabase password update error:", error);
-        }
-        return { error };
-    },
-
-};
+      return data?.role || null;
+    } catch (error) {
+      console.error("Error fetching user role:", error);
+      return null;
+    }
+  }
+}

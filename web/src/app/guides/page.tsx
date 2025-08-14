@@ -1,8 +1,11 @@
-import { guideService } from "@/services/guideService"
+import { GuideService } from "@/services/guideService"
 import { GuideProfileCard } from "@/components/features/GuideProfileCard"
 import styles from "./page.module.css"
+import { createClient } from "@/lib/supabase/server"
 
 export default async function GuidesPage() {
+  const supabase = await createClient()
+  const guideService = new GuideService(supabase)
   const guides = await guideService.getAllGuidesWithTours()
 
   return (

@@ -3,8 +3,9 @@
 import { useState } from "react"
 import MobileMenuButton from "./MobileMenuButton"
 import MobileNav from "./MobileNav"
-import { authClientService } from "@/services/authClientService"
+import { AuthService } from "@/services/authService"
 import { AuthenticatedUser } from "@/types/database.types"
+import { createClient } from "@/lib/supabase/client"
 
 interface MobileMenuProps {
   user: AuthenticatedUser | null
@@ -14,6 +15,8 @@ interface MobileMenuProps {
 
 export default function MobileMenu({ user, navigationLinks, moreMenuItems }: MobileMenuProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const supabase = createClient()
+  const authService = new AuthService(supabase)
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen)
@@ -21,7 +24,7 @@ export default function MobileMenu({ user, navigationLinks, moreMenuItems }: Mob
 
   const handleLogout = async () => {
     try {
-      await authClientService.logout()
+      await authService.logout()
       window.location.href = "/"
     } catch (error) {
       console.error("Logout error:", error)

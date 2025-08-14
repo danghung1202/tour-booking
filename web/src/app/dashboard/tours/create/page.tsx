@@ -5,7 +5,7 @@ import type React from "react"
 import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import type { Tour } from "@/packages/types"
-import { tourService } from "@/services/tourService"
+import { TourService } from "@/services/tourService"
 import { CategoryService } from "@/services/categoryService"
 import TourImageUploader from "@/components/features/TourImageUploader"
 import RichTextEditor from "@/components/features/RichTextEditor"
@@ -35,6 +35,7 @@ export default function CreateTourPage() {
   const router = useRouter()
   const supabase = createClient()
   const categoryService = new CategoryService(supabase)
+  const tourService = new TourService(supabase)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [categories, setCategories] = useState<Category[]>([])
   const [isLoadingCategories, setIsLoadingCategories] = useState(true)

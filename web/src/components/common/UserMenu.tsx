@@ -1,15 +1,18 @@
 "use client"
 
 import { useState, useRef, useEffect } from "react"
-import { authClientService } from "@/services/authClientService"
+import { AuthService } from "@/services/authService"
 import styles from "./UserMenu.module.css"
 import { AuthenticatedUser } from "@/types/database.types"
+import { createClient } from "@/lib/supabase/client"
 
 interface UserMenuProps {
   user: AuthenticatedUser
 }
 
 export default function UserMenu({ user }: UserMenuProps) {
+  const supabase = createClient()
+  const authService = new AuthService(supabase)
   const [isOpen, setIsOpen] = useState(false)
   const [isLoggingOut, setIsLoggingOut] = useState(false)
   const menuRef = useRef<HTMLDivElement>(null)
@@ -49,7 +52,7 @@ export default function UserMenu({ user }: UserMenuProps) {
   const handleLogout = async () => {
     setIsLoggingOut(true)
     try {
-      await authClientService.logout()
+      await authService.logout()
       window.location.href = "/"
     } catch (error) {
       console.error("Logout error:", error)

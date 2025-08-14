@@ -1,8 +1,9 @@
 "use client";
 
 import { createContext, useContext, useEffect, useState } from "react";
-import { authClientService } from "@/services/authClientService";
+import { AuthService } from "@/services/authService";
 import { User } from "@supabase/supabase-js";
+import { createClient } from "@/lib/supabase/client";
 
 interface AuthContextType {
   user: User | null;
@@ -14,13 +15,15 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-
+  
+  const supabase = createClient()
+  const authService = new AuthService(supabase)
   useEffect(() => {
     // The onAuthStateChange listener handles both the initial session check
     // and any subsequent auth changes. This avoids a redundant initial fetch.
-    const { data: authListener } = authClientService.onAuthStateChange(async (_event, session) => {
+    const { data: authListener } = authService.onAuthStateChange(async (_event, session) => {
       if (session) {
-        const currentUser = await authClientService.getCurrentUser();
+        const currentUser = await authService.getCurrentUser();
         setUser(currentUser);
       } else {
         setUser(null);

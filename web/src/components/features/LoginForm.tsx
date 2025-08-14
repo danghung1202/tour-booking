@@ -3,8 +3,9 @@
 import type React from "react"
 import { useState } from "react"
 import { useRouter } from "next/navigation"
-import { authClientService } from "@/services/authClientService"
+import { AuthService } from "@/services/authService"
 import styles from "./LoginForm.module.css"
+import { createClient } from "@/lib/supabase/client"
 
 type FormData = {
   email: string
@@ -19,6 +20,8 @@ type FormErrors = {
 
 export default function LoginForm() {
   const router = useRouter()
+  const supabase = createClient()
+  const authService = new AuthService(supabase)
   const [formData, setFormData] = useState<FormData>({
     email: "",
     password: "",
@@ -70,7 +73,7 @@ export default function LoginForm() {
     setErrors({})
 
     try {
-      const { error } = await authClientService.login(formData.email, formData.password)
+      const { error } = await authService.login(formData.email, formData.password)
       if (error) throw error;
 
       window.location.href = "/"

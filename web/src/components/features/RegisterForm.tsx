@@ -3,8 +3,9 @@
 import type React from "react"
 import { useState } from "react"
 import { useRouter } from "next/navigation"
-import { authClientService } from "@/services/authClientService"
+import { AuthService } from "@/services/authService"
 import styles from "./RegisterForm.module.css"
+import { createClient } from "@/lib/supabase/client"
 
 type FormData = {
   email: string
@@ -21,6 +22,8 @@ type FormErrors = {
 
 export default function RegisterForm() {
   const router = useRouter()
+  const supabase = createClient()
+  const authService = new AuthService(supabase)
   const [formData, setFormData] = useState<FormData>({
     email: "",
     password: "",
@@ -84,7 +87,7 @@ export default function RegisterForm() {
     setErrors({})
 
     try {
-      await authClientService.register(formData.email, formData.password)
+      await authService.register(formData.email, formData.password)
       // User is automatically logged in after successful registration
       window.location.href = "/"
     } catch (error) {

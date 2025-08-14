@@ -2,9 +2,10 @@
 
 import { useState } from "react"
 import { useRouter, usePathname } from "next/navigation"
-import { authClientService } from "@/services/authClientService"
+import { AuthService } from "@/services/authService"
 import { AuthenticatedUser } from "@/types/database.types"
 import styles from "./DashboardSidebar.module.css"
+import { createClient } from "@/lib/supabase/client"
 
 type DashboardSidebarProps = {
   user: AuthenticatedUser | null
@@ -14,7 +15,9 @@ export default function DashboardSidebar({ user }: DashboardSidebarProps) {
   const router = useRouter()
   const pathname = usePathname()
   const [isLoggingOut, setIsLoggingOut] = useState(false)
-
+  const supabase = createClient()
+  const authService = new AuthService(supabase)
+  
   const navigationLinks = [
     {
       href: "/dashboard",
@@ -48,7 +51,7 @@ export default function DashboardSidebar({ user }: DashboardSidebarProps) {
 
     setIsLoggingOut(true)
     try {
-      await authClientService.logout()
+      await authService.logout()
       router.push("/login")
     } catch (error) {
       console.error("Logout failed:", error)
