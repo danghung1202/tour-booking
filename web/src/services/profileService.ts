@@ -1,4 +1,5 @@
 import type { Profile } from "@/packages/types"
+import { SupabaseClient } from "@supabase/supabase-js";
 
 // Mock profile data for the authenticated guide
 const mockGuideProfile: Profile = {
@@ -12,123 +13,139 @@ const mockGuideProfile: Profile = {
   updated_at: new Date("2024-01-20T14:30:00Z").toISOString(),
 }
 
-// Simulate file upload to Supabase Storage
-const simulateFileUpload = async (file: File): Promise<string> => {
-  console.log("Simulating file upload to Supabase Storage:", file.name)
+export class ProfileService {
+  private supabase: SupabaseClient<any, "app", any>;
 
-  // Simulate upload progress and delay
-  await new Promise((resolve) => setTimeout(resolve, 2000))
-
-  // Simulate occasional upload errors
-  if (Math.random() < 0.05) {
-    throw new Error("Upload failed - please try again")
+  constructor(supabaseClient: SupabaseClient<any, "app", any>) {
+    this.supabase = supabaseClient;
   }
 
-  // Return a mock URL that would come from Supabase Storage
-  const timestamp = Date.now()
-  const mockUrl = `/placeholder.svg?height=200&width=200&text=${encodeURIComponent(file.name)}&t=${timestamp}`
+  /**
+   * Simulate file upload to Supabase Storage
+   * Private helper method
+   */
+  private async simulateFileUpload(file: File): Promise<string> {
+    console.log("Simulating file upload to Supabase Storage:", file.name)
 
-  console.log("File uploaded successfully:", mockUrl)
-  return mockUrl
+    // Simulate upload progress and delay
+    await new Promise((resolve) => setTimeout(resolve, 2000))
 
-  // In production, this would be:
-  // const { data, error } = await supabase.storage
-  //   .from('profile-photos')
-  //   .upload(`${userId}/${file.name}`, file)
-  // if (error) throw error
-  // return supabase.storage.from('profile-photos').getPublicUrl(data.path).data.publicUrl
-}
+    // Simulate occasional upload errors
+    if (Math.random() < 0.05) {
+      throw new Error("Upload failed - please try again")
+    }
 
-export const profileService = {
+    // Return a mock URL that would come from Supabase Storage
+    const timestamp = Date.now()
+    const mockUrl = `/placeholder.svg?height=200&width=200&text=${encodeURIComponent(file.name)}&t=${timestamp}`
+
+    console.log("File uploaded successfully:", mockUrl)
+    return mockUrl
+
+    // In a real app, this would use the Supabase client to upload files
+    // const { data, error } = await this.supabase.storage
+    //   .from('profile-photos')
+    //   .upload(`${userId}/${file.name}`, file)
+    // if (error) throw error
+    // return this.supabase.storage.from('profile-photos').getPublicUrl(data.path).data.publicUrl
+  }
+
   /**
    * Fetch the current guide's profile information
    */
   async getMyProfile(): Promise<Profile> {
-    console.log("Fetching current guide's profile...")
+    try {
+      console.log("Fetching current guide's profile...")
 
-    // Simulate API delay
-    await new Promise((resolve) => setTimeout(resolve, 800))
+      // Simulate API delay
+      await new Promise((resolve) => setTimeout(resolve, 800))
 
-    // Simulate occasional API errors for testing
-    if (Math.random() < 0.02) {
-      throw new Error("Failed to fetch profile data")
+      // In a real app, this would use the Supabase client to fetch profile data
+      // const { data: { user } } = await this.supabase.auth.getUser()
+      // const { data, error } = await this.supabase
+      //   .from('profiles')
+      //   .select('*')
+      //   .eq('id', user.id)
+      //   .single()
+      // if (error) throw error
+      // return data
+
+      // Simulate occasional API errors for testing
+      if (Math.random() < 0.02) {
+        throw new Error("Failed to fetch profile data")
+      }
+
+      console.log("Profile data fetched successfully")
+      return { ...mockGuideProfile }
+    } catch (error) {
+      console.error("Error fetching profile:", error)
+      throw error
     }
-
-    console.log("Profile data fetched successfully")
-    return { ...mockGuideProfile }
-
-    // In production, this would be:
-    // const response = await fetch('/api/v1/my-profile', {
-    //   headers: {
-    //     'Authorization': `Bearer ${accessToken}`
-    //   }
-    // })
-    // if (!response.ok) {
-    //   throw new Error('Failed to fetch profile')
-    // }
-    // return response.json()
-  },
+  }
 
   /**
    * Update the current guide's profile information
    */
   async updateMyProfile(profileData: Partial<Profile>): Promise<void> {
-    console.log("Updating profile with data:", profileData)
+    try {
+      console.log("Updating profile with data:", profileData)
 
-    // Simulate API delay
-    await new Promise((resolve) => setTimeout(resolve, 1200))
+      // Simulate API delay
+      await new Promise((resolve) => setTimeout(resolve, 1200))
 
-    // Simulate occasional API errors for testing
-    if (Math.random() < 0.03) {
-      throw new Error("Failed to update profile - server error")
+      // In a real app, this would use the Supabase client to update profile data
+      // const { data: { user } } = await this.supabase.auth.getUser()
+      // const { error } = await this.supabase
+      //   .from('profiles')
+      //   .update({
+      //     ...profileData,
+      //     updated_at: new Date().toISOString()
+      //   })
+      //   .eq('id', user.id)
+      // if (error) throw error
+
+      // Simulate occasional API errors for testing
+      if (Math.random() < 0.03) {
+        throw new Error("Failed to update profile - server error")
+      }
+
+      // Update mock data
+      Object.assign(mockGuideProfile, {
+        ...profileData,
+        updated_at: new Date().toISOString(),
+      })
+
+      console.log("Profile updated successfully")
+    } catch (error) {
+      console.error("Error updating profile:", error)
+      throw error
     }
-
-    // Update mock data
-    Object.assign(mockGuideProfile, {
-      ...profileData,
-      updated_at: new Date().toISOString(),
-    })
-
-    console.log("Profile updated successfully")
-
-    // In production, this would be:
-    // const response = await fetch('/api/v1/my-profile', {
-    //   method: 'PATCH',
-    //   headers: {
-    //     'Content-Type': 'application/json',
-    //     'Authorization': `Bearer ${accessToken}`
-    //   },
-    //   body: JSON.stringify(profileData)
-    // })
-    // if (!response.ok) {
-    //   throw new Error('Failed to update profile')
-    // }
-  },
+  }
 
   /**
    * Upload a profile photo to Supabase Storage
    */
   async uploadProfilePhoto(file: File): Promise<string> {
-    // Validate file type
-    if (!file.type.startsWith("image/")) {
-      throw new Error("Please select a valid image file")
-    }
-
-    // Validate file size (max 5MB)
-    if (file.size > 5 * 1024 * 1024) {
-      throw new Error("Image file must be smaller than 5MB")
-    }
-
-    console.log("Uploading profile photo:", file.name, `(${(file.size / 1024 / 1024).toFixed(2)}MB)`)
-
     try {
-      const photoUrl = await simulateFileUpload(file)
+      // Validate file type
+      if (!file.type.startsWith("image/")) {
+        throw new Error("Please select a valid image file")
+      }
+
+      // Validate file size (max 5MB)
+      if (file.size > 5 * 1024 * 1024) {
+        throw new Error("Image file must be smaller than 5MB")
+      }
+
+      console.log("Uploading profile photo:", file.name, `(${(file.size / 1024 / 1024).toFixed(2)}MB)`)
+
+      const photoUrl = await this.simulateFileUpload(file)
       return photoUrl
     } catch (error) {
       console.error("Profile photo upload failed:", error)
       throw error
     }
-  },
+  }
 
   /**
    * Validate profile data before submission
@@ -166,5 +183,5 @@ export const profileService = {
       isValid: Object.keys(errors).length === 0,
       errors,
     }
-  },
+  }
 }

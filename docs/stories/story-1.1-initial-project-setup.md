@@ -1,13 +1,11 @@
----
-epic: "Epic 1 Project Foundation & Core Platform Setup"
-status: "Ready for Dev"
-points: 8
----
-
 # Story 1.1: initial-project-setup
 
+- **Epic:** "Epic 1 Project Foundation & Core Platform Setup"
+- **Story:** 1.1
+- **Title:** Initial Project Setup & Basic Deployment Pipeline
+
 ### Status
-- Ready for Dev
+- `Done`
 
 ### Story
 **As a** Developer,
@@ -30,7 +28,7 @@ points: 8
 - [x] Task 5: Create a new Vercel project and link it to the Git repository. (AC: #4)
 - [x] Task 6: Configure production environment variables in the Vercel project settings. (AC: #2, #5)
 - [x] Task 7: Push the `main` branch and verify successful production deployment. (AC: #5)
-- [ ] Task 8: Create a new branch (e.g., `dev`), push it, and verify successful preview deployment. (AC: #6)
+- [x] Task 8: Create a new branch (e.g., `dev`), push it, and verify successful preview deployment. (AC: #6)
 
 ### Dev Notes
 This story establishes the fundamental scaffolding for the entire project. All work should adhere to the standards defined in the `docs/architecture` directory.

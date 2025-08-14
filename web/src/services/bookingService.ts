@@ -1,4 +1,5 @@
 import type { BookingRequest } from "@/packages/types"
+import { SupabaseClient } from "@supabase/supabase-js";
 
 interface BookingResponse {
   id: string
@@ -45,27 +46,13 @@ interface TouristBooking {
   }
 }
 
-// API client utility
-const apiClient = {
-  async post<T>(url: string, data: any): Promise<T> {
-    const response = await fetch(url, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-    })
+export class BookingService {
+  private supabase: SupabaseClient<any, "app", any>;
 
-    if (!response.ok) {
-      const errorData = await response.json().catch(() => ({}))
-      throw new Error(errorData.message || `HTTP error! status: ${response.status}`)
-    }
+  constructor(supabaseClient: SupabaseClient<any, "app", any>) {
+    this.supabase = supabaseClient;
+  }
 
-    return response.json()
-  },
-}
-
-export const bookingService = {
   async create(tourId: string, bookingData: BookingRequest): Promise<BookingResponse> {
     try {
       // Validate required fields
@@ -85,7 +72,20 @@ export const bookingService = {
         throw new Error("Number of kids cannot be negative")
       }
 
-      // In a real application, this would call your actual API endpoint
+      // In a real app, this would use the Supabase client to create a booking
+      // const { data, error } = await this.supabase
+      //   .from('bookings')
+      //   .insert({
+      //     tour_id: tourId,
+      //     ...bookingData,
+      //     status: 'pending_confirmation',
+      //     created_at: new Date().toISOString()
+      //   })
+      //   .select()
+      //   .single()
+      // if (error) throw error
+      // return data
+
       // For now, we'll simulate an API call with a delay
       await new Promise((resolve) => setTimeout(resolve, 2000))
 
@@ -113,9 +113,6 @@ export const bookingService = {
       })
 
       return response
-
-      // In production, uncomment this line and remove the mock code above:
-      // return apiClient.post<BookingResponse>(`/api/v1/tours/${tourId}/bookings`, bookingData)
     } catch (error) {
       console.error("Booking service error:", error)
 
@@ -125,7 +122,7 @@ export const bookingService = {
 
       throw new Error("Failed to submit booking request. Please try again.")
     }
-  },
+  }
 
   async getMyBookings(status?: string): Promise<BookingWithTourInfo[]> {
     try {
@@ -133,6 +130,22 @@ export const bookingService = {
       await new Promise((resolve) => setTimeout(resolve, 800))
 
       console.log("Fetching bookings with status filter:", status)
+
+      // In a real app, this would use the Supabase client to fetch bookings
+      // let query = this.supabase
+      //   .from('bookings')
+      //   .select(`
+      //     *,
+      //     tour:tours (
+      //       title
+      //     )
+      //   `)
+      // if (status && status !== 'all') {
+      //   query = query.eq('status', status)
+      // }
+      // const { data, error } = await query.order('created_at', { ascending: false })
+      // if (error) throw error
+      // return data
 
       // Mock bookings data that includes tour information
       const mockBookings: BookingWithTourInfo[] = [
@@ -329,15 +342,11 @@ export const bookingService = {
 
       console.log(`Returning ${filteredBookings.length} bookings for status: ${status || "all"}`)
       return filteredBookings
-
-      // In production, this would be:
-      // const queryParams = status && status !== 'all' ? `?status=${status}` : ''
-      // return apiClient.get<BookingWithTourInfo[]>(`/api/v1/my-bookings${queryParams}`)
     } catch (error) {
       console.error("Get my bookings error:", error)
       throw new Error("Failed to fetch bookings. Please try again.")
     }
-  },
+  }
 
   async updateBookingStatus(bookingId: string, status: "confirmed" | "rejected"): Promise<void> {
     try {
@@ -350,6 +359,13 @@ export const bookingService = {
         throw new Error("Invalid status. Must be 'confirmed' or 'rejected'")
       }
 
+      // In a real app, this would use the Supabase client to update booking status
+      // const { error } = await this.supabase
+      //   .from('bookings')
+      //   .update({ status })
+      //   .eq('id', bookingId)
+      // if (error) throw error
+
       // Simulate API delay
       await new Promise((resolve) => setTimeout(resolve, 1000))
 
@@ -357,9 +373,6 @@ export const bookingService = {
 
       // Mock successful response
       console.log("Booking status updated successfully")
-
-      // In production, this would be:
-      // return apiClient.patch(`/api/v1/bookings/${bookingId}`, { status })
     } catch (error) {
       console.error("Update booking status error:", error)
 
@@ -369,7 +382,7 @@ export const bookingService = {
 
       throw new Error("Failed to update booking status. Please try again.")
     }
-  },
+  }
 
   async getTouristBookings(): Promise<TouristBooking[]> {
     try {
@@ -377,6 +390,23 @@ export const bookingService = {
       await new Promise((resolve) => setTimeout(resolve, 1000))
 
       console.log("Fetching tourist bookings...")
+
+      // In a real app, this would use the Supabase client to fetch bookings
+      // const { data: user } = await this.supabase.auth.getUser()
+      // const { data, error } = await this.supabase
+      //   .from('bookings')
+      //   .select(`
+      //     *,
+      //     tour:tours (
+      //       id,
+      //       title,
+      //       images
+      //     )
+      //   `)
+      //   .eq('user_id', user.id)
+      //   .order('booking_date', { ascending: false })
+      // if (error) throw error
+      // return data
 
       // Mock tourist bookings data with tour information
       const mockTouristBookings: TouristBooking[] = [
@@ -471,14 +501,11 @@ export const bookingService = {
 
       console.log(`Returning ${mockTouristBookings.length} tourist bookings`)
       return mockTouristBookings
-
-      // In production, this would be:
-      // return apiClient.get<TouristBooking[]>('/api/v1/my-bookings')
     } catch (error) {
       console.error("Get tourist bookings error:", error)
       throw new Error("Failed to fetch your bookings. Please try again.")
     }
-  },
+  }
 
   async cancelMyBooking(bookingId: string): Promise<void> {
     try {
@@ -486,6 +513,13 @@ export const bookingService = {
       if (!bookingId) {
         throw new Error("Booking ID is required")
       }
+
+      // In a real app, this would use the Supabase client to update booking status
+      // const { error } = await this.supabase
+      //   .from('bookings')
+      //   .update({ status: 'cancelled' })
+      //   .eq('id', bookingId)
+      // if (error) throw error
 
       // Simulate API delay
       await new Promise((resolve) => setTimeout(resolve, 1500))
@@ -499,9 +533,6 @@ export const bookingService = {
 
       // Mock successful response
       console.log("Booking cancelled successfully")
-
-      // In production, this would be:
-      // return apiClient.patch(`/api/v1/my-bookings/${bookingId}/cancel`)
     } catch (error) {
       console.error("Cancel booking error:", error)
 
@@ -511,5 +542,5 @@ export const bookingService = {
 
       throw new Error("Failed to cancel booking. Please try again.")
     }
-  },
+  }
 }

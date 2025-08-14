@@ -2,13 +2,16 @@
 
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
-import { authService } from "@/services/authService"
+import { AuthService } from "@/services/authService"
 import styles from "./AdminSidebar.module.css"
+import { createClient } from "@/lib/supabase/client"
 
 export default function AdminSidebar() {
   const pathname = usePathname()
   const router = useRouter()
-
+  const supabase = createClient()
+  const authService = new AuthService(supabase) 
+  
   const handleLogout = async () => {
     try {
       await authService.logout()
