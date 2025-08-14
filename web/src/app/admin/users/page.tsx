@@ -3,8 +3,9 @@
 import type React from "react"
 
 import { useState, useEffect } from "react"
-import { adminService, type AdminUser } from "@/services/adminService"
+import { AdminService, type AdminUser } from "@/services/adminService"
 import styles from "./page.module.css"
+import { createClient } from "@/lib/supabase/client"
 
 export default function ManageUsersPage() {
   const [users, setUsers] = useState<AdminUser[]>([])
@@ -18,6 +19,8 @@ export default function ManageUsersPage() {
   const [successMessage, setSuccessMessage] = useState<string | null>(null)
 
   const usersPerPage = 10
+  const supabase = createClient()
+  const adminService = new AdminService(supabase)
 
   // Fetch users
   const fetchUsers = async (search = "", page = 1) => {

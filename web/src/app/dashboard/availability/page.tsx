@@ -1,12 +1,17 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { tourService } from "@/services/tourService"
-import { availabilityService } from "@/services/availabilityService"
+import { TourService } from "@/services/tourService"
+import { AvailabilityService } from "@/services/availabilityService"
 import type { Tour } from "@/packages/types"
 import styles from "./page.module.css"
+import { createClient } from "@/lib/supabase/client"
 
 export default function ManageAvailabilityPage() {
+  const supabase = createClient()
+  const tourService = new TourService(supabase)
+  const availabilityService = new AvailabilityService(supabase)
+  
   const [tours, setTours] = useState<Tour[]>([])
   const [selectedTourId, setSelectedTourId] = useState<string>("")
   const [unavailableDates, setUnavailableDates] = useState<string[]>([])

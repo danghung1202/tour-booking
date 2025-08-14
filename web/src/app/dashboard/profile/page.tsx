@@ -3,9 +3,10 @@
 import type React from "react"
 
 import { useState, useEffect, useRef } from "react"
-import { profileService } from "@/services/profileService"
+import { ProfileService } from "@/services/profileService"
 import type { Profile } from "@/packages/types"
 import styles from "./page.module.css"
+import { createClient } from "@/lib/supabase/client"
 
 interface FormData {
   name: string
@@ -23,6 +24,8 @@ interface FormErrors {
 }
 
 export default function ProfilePage() {
+  const supabase = createClient()
+  const profileService = new ProfileService(supabase)
   const [profile, setProfile] = useState<Profile | null>(null)
   const [formData, setFormData] = useState<FormData>({
     name: "",
