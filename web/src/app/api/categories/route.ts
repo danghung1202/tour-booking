@@ -1,8 +1,11 @@
 import { NextResponse } from 'next/server';
-import { categoryService } from '@/services/categoryService';
+import { CategoryService } from '@/services/categoryService';
+import { createClient } from '@/lib/supabase/server';
 
 export async function GET() {
+  const supabase = await createClient();
   try {
+    const categoryService = new CategoryService(supabase);
     const categories = await categoryService.getAll();
     return NextResponse.json(categories);
   } catch (error) {

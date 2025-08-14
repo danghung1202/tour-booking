@@ -1,5 +1,5 @@
 import type { Category } from "@/types/database.types";
-import { createClient } from "@/lib/supabase/server";
+import { SupabaseClient } from "@supabase/supabase-js";
 
 // Keep mock data for fallback and development purposes
 const mockCategories: Category[] = [
@@ -40,39 +40,50 @@ const mockCategories: Category[] = [
   }
 ];
 
-export const categoryService = {
+export class CategoryService {
+  private supabase: SupabaseClient<any, "app", any>;
+
+  constructor(supabaseClient: SupabaseClient<any, "app", any>) {
+    this.supabase = supabaseClient;
+  }
+
   async getAll(): Promise<Category[]> {
     console.log("Fetching all categories from database...");
 
     try {
-      const supabase = await createClient();
       // Use the database helper function to get all categories
-      const {data: categories, error} = await supabase.from('categories').select('*')
+      const {data: categories, error} = await this.supabase.from('categories').select('*')
+      
+      if (error) {
+        console.error("Error fetching categories:", error);
+        // Fallback to mock data if the database query fails
+        console.warn("Error fetching categories from database, using mock data");
+        return mockCategories;
+      }
       
       // If we got categories from the database, return them
       if (categories && categories.length > 0) {
         return categories;
       }
       
-      // Fallback to mock data if the database query fails or returns empty
+      // Fallback to mock data if the database returns empty
       console.warn("No categories found in database, using mock data");
       return mockCategories;
     } catch (error) {
       console.error("Error fetching categories:", error);
       
-      // Fallback to mock data in case of error
+      // Fallback to mock data in case of unexpected error
       console.warn("Error fetching categories from database, using mock data");
       return mockCategories;
     }
-  },
+  }
 
   async getById(id: string): Promise<Category | null> {
     console.log("Fetching category by ID:", id);
 
     try {
       // Query the database for the category with the given ID
-      const supabase = await createClient();
-      const { data, error } = await supabase.from('categories').select('*').eq('id', id).single();
+      const { data, error } = await this.supabase.from('categories').select('*').eq('id', id).single();
       
       if (error) {
         throw error;
@@ -91,6 +102,5 @@ export const categoryService = {
       
       return null;
     }
-  },
-
-};
+  }
+}

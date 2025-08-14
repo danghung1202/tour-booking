@@ -6,10 +6,11 @@ import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import type { Tour } from "@/packages/types"
 import { tourService } from "@/services/tourService"
-import { categoryService } from "@/services/categoryService"
+import { CategoryService } from "@/services/categoryService"
 import TourImageUploader from "@/components/features/TourImageUploader"
 import RichTextEditor from "@/components/features/RichTextEditor"
 import styles from "./page.module.css"
+import { createClient } from "@/lib/supabase/client"
 
 interface Category {
   id: string
@@ -32,6 +33,8 @@ interface FormErrors {
 
 export default function CreateTourPage() {
   const router = useRouter()
+  const supabase = createClient()
+  const categoryService = new CategoryService(supabase)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [categories, setCategories] = useState<Category[]>([])
   const [isLoadingCategories, setIsLoadingCategories] = useState(true)
@@ -87,8 +90,8 @@ export default function CreateTourPage() {
     const loadCategories = async () => {
       try {
         setIsLoadingCategories(true)
-        const fetchedCategories = await categoryService.getAll()
-        setCategories(fetchedCategories)
+        const categories = await categoryService.getAll()
+        setCategories(categories)
       } catch (error) {
         console.error("Failed to load categories:", error)
         setErrors({ general: "Failed to load categories. Please refresh the page." })

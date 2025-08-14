@@ -1,12 +1,15 @@
 import Link from "next/link"
 import Image from "next/image"
 import { tourService } from "@/services/tourService"
-import { categoryService } from "@/services/categoryService"
+import { CategoryService } from "@/services/categoryService"
 import { guideService } from "@/services/guideService"
 import TourCard from "@/components/common/TourCard"
 import styles from "./page.module.css"
+import { createClient } from "@/lib/supabase/server"
 
 export default async function HomePage() {
+  const supabase = await createClient();
+  const categoryService = new CategoryService(supabase);
   // Fetch data for dynamic sections
   const [featuredTours, categories, featuredGuides] = await Promise.all([
     tourService.getFeaturedTours(),

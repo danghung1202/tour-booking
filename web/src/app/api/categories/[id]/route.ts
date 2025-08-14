@@ -1,11 +1,14 @@
 import { NextResponse } from 'next/server';
-import { categoryService } from '@/services/categoryService';
+import { CategoryService } from '@/services/categoryService';
+import { createClient } from '@/lib/supabase/server';
 
 export async function GET(
   request: Request,
   { params }: { params: { id: string } }
 ) {
   try {
+    const supabase = await createClient();
+    const categoryService = new CategoryService(supabase);
     const category = await categoryService.getById(params.id);
     
     if (!category) {
