@@ -7,7 +7,7 @@
 ---
 
 ### Status
-`Draft`
+`Ready for Review`
 
 ---
 
@@ -28,14 +28,14 @@
 ---
 
 ### Tasks / Subtasks
-- [ ] Task 1: If not already created in Story 1.2, write and apply a migration to create the `languages` table. (AC: #1)
-- [ ] Task 2: Create a new database seed migration to populate the `languages` table. (AC: #2)
-    - [ ] Subtask 2.1: Write SQL `INSERT` statements for the predefined list of languages: 'English', 'Vietnamese', 'French', 'Japanese', 'Spanish'.
-- [ ] Task 3: If not already updated in Story 1.2, write and apply a migration to add the `timezone` text field to the `tours` table. (AC: #3)
-- [ ] Task 4: Create a utility or constant within the application that provides a list of common IANA Time Zone names. (AC: #4)
-    - [ ] Subtask 4.1: This list will be used to populate a dropdown in the tour creation form.
-- [ ] Task 5: Create Supabase client functions to fetch the lists of languages and time zones for the frontend. (AC: #5)
-- [ ] Task 6: Apply the migrations and verify the `languages` table is populated and the `tours` table has the `timezone` column.
+- [x] Task 1: If not already created in Story 1.2, write and apply a migration to create the `languages` table. (AC: #1)
+- [x] Task 2: Create a new database seed migration to populate the `languages` table. (AC: #2)
+    - [x] Subtask 2.1: Write SQL `INSERT` statements for the predefined list of languages: 'English', 'Vietnamese', 'French', 'Japanese', 'Spanish'.
+- [x] Task 3: If not already updated in Story 1.2, write and apply a migration to add the `timezone` text field to the `tours` table. (AC: #3)
+- [x] Task 4: Create a utility or constant within the application that provides a list of common IANA Time Zone names. (AC: #4)
+    - [x] Subtask 4.1: This list will be used to populate a dropdown in the tour creation form.
+- [x] Task 5: Create Supabase client functions to fetch the lists of languages and time zones for the frontend. (AC: #5)
+- [x] Task 6: Apply the migrations and verify the `languages` table is populated and the `tours` table has the `timezone` column.
 
 ---
 
@@ -54,5 +54,33 @@
 
 ---
 
+### Dev Agent Record
+#### Agent Model Used
+Claude 3.7 Sonnet
+
+#### Debug Log
+No issues encountered during implementation.
+
+#### Completion Notes
+- Confirmed `languages` table already exists in initial schema (20250716_initial_schema.sql)
+- Confirmed `tours` table already has `timezone` column (20250716_initial_schema.sql)
+- Created new migration file (20250720_seed_languages.sql) to seed 5 languages: English, Vietnamese, French, Japanese, Spanish
+- Created timezone utility (web/src/utils/timezones.ts) with common IANA timezones and helper functions
+- Created language service (web/src/services/languageService.ts) to fetch languages from database
+- Created timezone service (web/src/services/timezoneService.ts) to provide timezone options
+- All services include functions to format the data for frontend components
+
+#### File List
+- Created: web/supabase/migrations/20250720_seed_languages.sql
+- Created: web/src/utils/timezones.ts
+- Created: web/src/services/languageService.ts
+- Created: web/src/services/timezoneService.ts
+- Modified: docs/stories/story-1.8-seed-languages-timezones.md
+
+---
+
 ### Change Log
-- _No changes yet._ 
+- Created database seed migration for languages
+- Created utility functions for timezones
+- Created services for accessing languages and timezones
+- Updated story status to Ready for Review 
